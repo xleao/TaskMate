@@ -92,7 +92,7 @@
     }
   </style>
   </head>
-<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px))">
+<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px))">
 <!-- TopAppBar -->
 <header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 z-40 sticky safe-top">
 <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
@@ -119,27 +119,61 @@
 <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
 </div>
-<input class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-primary/20 transition-all font-body text-on-surface placeholder:text-outline" placeholder="Buscar tareas..." type="text"/>
+<input id="search-tasks-input" class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-primary/20 transition-all font-body text-on-surface placeholder:text-outline" placeholder="Buscar tareas..." type="text"/>
 <div class="absolute inset-y-0 right-4 flex items-center">
-<button class="text-primary p-1">
-<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<button id="clear-filters-btn" class="text-primary p-1 hidden" title="Limpiar filtros">
+<span class="material-symbols-outlined" data-icon="filter_alt_off">filter_alt_off</span>
 </button>
 </div>
 </div>
-<!-- Filter Chips -->
-<div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
-<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">
-<span class="material-symbols-outlined text-[18px]" data-icon="school">school</span>
-                    Materia
-                </button>
-<button class="flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-[18px]" data-icon="flag">flag</span>
-                    Estado
-                </button>
-<button class="flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors">
-<span class="material-symbols-outlined text-[18px]" data-icon="priority_high">priority_high</span>
-                    Prioridad
-                </button>
+<!-- Filter Chips (Functional Dropdowns) -->
+<div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar relative">
+<!-- Materia Filter -->
+<div class="relative filter-dropdown-wrapper">
+<button id="filter-materia-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">school</span>
+Materia
+<span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+</button>
+<div id="filter-materia-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/15 min-w-[200px] z-[60] overflow-hidden">
+<div id="filter-materia-options" class="max-h-48 overflow-y-auto py-2">
+<button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todas</button>
+</div>
+</div>
+</div>
+<!-- Estado Filter -->
+<div class="relative filter-dropdown-wrapper">
+<button id="filter-estado-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">flag</span>
+Estado
+<span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+</button>
+<div id="filter-estado-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/15 min-w-[180px] z-[60] overflow-hidden">
+<div class="py-2">
+<button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todos</button>
+<button data-value="pendiente" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">⏳ Pendiente</button>
+<button data-value="en_progreso" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">🔄 En Progreso</button>
+<button data-value="completada" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">✅ Completada</button>
+<button data-value="vencida" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">❌ Vencida</button>
+</div>
+</div>
+</div>
+<!-- Prioridad Filter -->
+<div class="relative filter-dropdown-wrapper">
+<button id="filter-prioridad-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">priority_high</span>
+Prioridad
+<span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+</button>
+<div id="filter-prioridad-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/15 min-w-[160px] z-[60] overflow-hidden">
+<div class="py-2">
+<button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todas</button>
+<button data-value="alta" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-error hover:bg-surface-container-high transition-colors">🔴 Alta</button>
+<button data-value="media" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-yellow-600 hover:bg-surface-container-high transition-colors">🟡 Media</button>
+<button data-value="baja" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-emerald-600 hover:bg-surface-container-high transition-colors">🟢 Baja</button>
+</div>
+</div>
+</div>
 </div>
 </div>
 <!-- Task List Section -->
@@ -151,16 +185,16 @@
 </div>
 </div>
 <!-- Bento Grid for Stats (Editorial Touch) -->
-<div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 <div class="bg-primary-container/10 p-6 rounded-2xl flex flex-col justify-between border border-primary/5 min-h-[160px]">
 <span class="text-primary font-bold text-sm tracking-widest uppercase">Progreso Semanal</span>
 <div class="mt-4">
 <div class="flex justify-between items-end mb-2">
-<span class="text-3xl font-extrabold text-primary font-headline">75%</span>
-<span class="text-xs text-primary/70 font-medium">12/16 tareas completadas</span>
+<span id="progress-percent" class="text-3xl font-extrabold text-primary font-headline">--%</span>
+<span id="progress-count" class="text-xs text-primary/70 font-medium">Calculando...</span>
 </div>
 <div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-primary to-surface-tint w-3/4"></div>
+<div id="progress-bar" class="h-full bg-gradient-to-r from-primary to-surface-tint transition-all duration-500" style="width: 0%"></div>
 </div>
 </div>
 </div>
@@ -178,8 +212,8 @@
 </div>
 </main>
 <!-- Floating Action Button -->
-<button id="add-task-fab" class="fixed right-6 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl shadow-[0_12px_32px_-4px_rgba(53,37,205,0.3)] flex items-center justify-center transition-transform active:scale-95 z-50" style="bottom: calc(6rem + env(safe-area-inset-bottom, 0px))">
-<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+<button id="add-task-fab" class="fixed right-6 w-16 h-16 bg-gradient-to-br from-primary to-primary-container text-white rounded-2xl flex items-center justify-center transition-transform active:scale-95" style="bottom: calc(5rem + env(safe-area-inset-bottom, 0px)); z-index: 9999; box-shadow: 0 8px 24px rgba(53,37,205,0.4);">
+<span class="material-symbols-outlined text-3xl">add</span>
 </button>
 <!-- Task Creation Modal -->
 <div id="task-modal" class="hidden fixed inset-0 bg-surface/80 backdrop-blur-sm z-50 flex items-center justify-center px-4 transition-all">
@@ -225,7 +259,7 @@
 </div>
 
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(0.25rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)]">
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] duration-150 active:scale-95" href="./dashboard.html">
 <span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
 <span class="font-['Inter'] text-[10px] font-medium">Dashboard</span>

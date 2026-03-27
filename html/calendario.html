@@ -92,9 +92,10 @@
     }
   </style>
   </head>
-<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px))">
+<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px))">
 <!-- TopAppBar -->
-<header class="bg-[#f9f9ff] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto docked full-width top-0 sticky z-40 safe-top">
+<header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 sticky z-40 safe-top">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
 <img class="w-full h-full object-cover" data-alt="Close up portrait of a young male student with a focused expression in a bright library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAlATYGGsmFJWKeUJH-ne35ZPcs51v-2nbCtM0Rm8tYqZ23mdgOL9JLCuRxrC8d3jEk6PN-0BsoStQ8Cd8WrRHLS--PXqDkrWgpPTN1hoMUbphy5vgjmO9PW3GlGdt0rfoficQW4QzKJlLwJ_101HSUrxtWRn-lQtGVeTAqmf0kZcHKgIgatgulOCAcF3ja4gz5V6py2f2YXRXUKaQyNJkKDtOjm5GTZbFKRNqFKEPXLo2bwxsn_34FdEFnohwVTJpDD3uiDZTJgJ1"/>
@@ -108,6 +109,7 @@
 <button onclick="logout()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200" title="Cerrar sesión">
 <span class="material-symbols-outlined text-red-500">logout</span>
 </button>
+</div>
 </div>
 </header>
 <main class="max-w-7xl mx-auto px-6 pt-4 space-y-8">
@@ -203,7 +205,7 @@
 </section>
 </main>
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(0.25rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)]">
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./dashboard.html">
 <span class="material-symbols-outlined">dashboard</span>
 <span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
