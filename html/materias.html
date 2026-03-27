@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<title>TaskMate - Subjects</title>
+<title>TaskMate - Materias</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -123,8 +123,8 @@
 <main class="max-w-xl mx-auto px-6 pt-8">
 <!-- Section Header -->
 <div class="mb-10">
-<h2 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight mb-2">Subjects</h2>
-<p class="text-on-surface-variant font-body">Organize your academic world by course.</p>
+<h2 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight mb-2">Materias</h2>
+<p class="text-on-surface-variant font-body">Organiza tu mundo académico por cursos.</p>
 </div>
 <!-- Subjects List: Intentional Asymmetry & Tonal Depth -->
 <div id="subjects-list" class="space-y-4 mb-12">
@@ -138,12 +138,12 @@
 <div class="space-y-6">
 <!-- Name Input -->
 <div>
-<label class="block text-sm font-label text-on-surface-variant mb-2">Subject Name</label>
-<input id="subject-name" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="e.g. Organic Chemistry" type="text"/>
+<label class="block text-sm font-label text-on-surface-variant mb-2">Nombre de la Materia</label>
+<input id="subject-name" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Ej. Química Orgánica" type="text"/>
 </div>
 <!-- Color Picker -->
 <div>
-<label class="block text-sm font-label text-on-surface-variant mb-3">Identify with Color</label>
+<label class="block text-sm font-label text-on-surface-variant mb-3">Identificar con Color</label>
 <div class="flex flex-wrap gap-4">
 <button data-color="#3525cd" class="color-picker-btn w-10 h-10 rounded-full bg-[#3525cd] ring-offset-2 ring-2 ring-gray-800"></button>
 <button data-color="#006693" class="color-picker-btn w-10 h-10 rounded-full bg-[#006693] hover:scale-110 transition-transform"></button>
@@ -159,7 +159,7 @@
 <!-- Action Button -->
 <button id="save-subject-btn" class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 rounded-xl font-bold font-headline shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.98]">
 <span class="material-symbols-outlined" data-icon="save">save</span>
-                        Save Subject
+                        Guardar Materia
                     </button>
 </div>
 </div>
@@ -172,22 +172,22 @@
 <!-- Dashboard -->
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./dashboard.html">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Inicio</span>
 </a>
 <!-- Tasks -->
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./tareas.html">
 <span class="material-symbols-outlined" data-icon="assignment">assignment</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Tasks</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Tareas</span>
 </a>
 <!-- Calendar -->
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./calendario.html">
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendar</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendario</span>
 </a>
 <!-- Subjects (ACTIVE) -->
 <a class="flex flex-col items-center justify-center bg-[#4f46e5] text-white rounded-2xl p-2 scale-110 shadow-lg shadow-primary/20 transition-all duration-150 active:scale-95" href="./materias.html">
 <span class="material-symbols-outlined" data-icon="category" style="font-variation-settings: 'FILL' 1;">category</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Subjects</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Materias</span>
 </a>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

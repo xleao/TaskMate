@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head>
+<html class="light" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<title>TaskMate - Calendar View</title>
+<title>TaskMate - Vista de Calendario</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -122,8 +122,8 @@
 <!-- View Toggle & Header -->
 <section class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 <div>
-<h1 class="text-3xl font-extrabold tracking-tight text-on-surface">Calendar</h1>
-<p class="text-on-surface-variant font-medium">Manage your academic schedule</p>
+<h1 class="text-3xl font-extrabold tracking-tight text-on-surface">Calendario</h1>
+<p class="text-on-surface-variant font-medium">Gestiona tu horario académico</p>
 </div>
 <div class="bg-surface-container-high p-1 rounded-xl flex items-center w-fit">
 <button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all text-on-surface-variant hover:text-primary">Semanal</button>
@@ -182,28 +182,28 @@
 </div>
 <!-- Subjects Legend / Mini Stats -->
 <div class="bg-surface-container-low rounded-xl p-6">
-<h4 class="font-bold text-on-surface mb-4">Focus areas this month</h4>
+<h4 class="font-bold text-on-surface mb-4">Áreas de enfoque este mes</h4>
 <div class="space-y-3">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="w-3 h-3 rounded-full bg-primary"></span>
-<span class="text-sm font-medium text-on-surface-variant">Mathematics</span>
+<span class="text-sm font-medium text-on-surface-variant">Matemáticas</span>
 </div>
-<span class="text-sm font-bold text-on-surface">12 tasks</span>
+<span class="text-sm font-bold text-on-surface">12 tareas</span>
 </div>
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
-<span class="text-sm font-medium text-on-surface-variant">Humanities</span>
+<span class="text-sm font-medium text-on-surface-variant">Humanidades</span>
 </div>
-<span class="text-sm font-bold text-on-surface">8 tasks</span>
+<span class="text-sm font-bold text-on-surface">8 tareas</span>
 </div>
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
 <span class="w-3 h-3 rounded-full bg-error"></span>
-<span class="text-sm font-medium text-on-surface-variant">Deadlines</span>
+<span class="text-sm font-medium text-on-surface-variant">Plazos</span>
 </div>
-<span class="text-sm font-bold text-on-surface">3 critical</span>
+<span class="text-sm font-bold text-on-surface">3 críticas</span>
 </div>
 </div>
 </div>
@@ -214,19 +214,19 @@
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(0.25rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)]">
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./dashboard.html">
 <span class="material-symbols-outlined">dashboard</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Inicio</span>
 </a>
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./tareas.html">
 <span class="material-symbols-outlined">assignment</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Tasks</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Tareas</span>
 </a>
 <a class="flex flex-col items-center justify-center bg-[#4f46e5] text-white rounded-2xl p-2 scale-110 transition-transform active:scale-95 duration-150" href="./calendario.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendar</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendario</span>
 </a>
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./materias.html">
 <span class="material-symbols-outlined">category</span>
-<span class="font-['Inter'] text-[10px] font-medium mt-1">Subjects</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Materias</span>
 </a>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
