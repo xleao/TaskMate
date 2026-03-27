@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskMate - Subjects</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#c9e6ff",
+                        "surface-dim": "#cfdaf2",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed-variant": "#444749",
+                        "tertiary-container": "#006693",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "secondary-fixed": "#e0e3e5",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-secondary-container": "#626567",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#b8e0ff",
+                        "primary": "#3525cd",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container-high": "#dee8ff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#4d44e3",
+                        "on-surface": "#111c2d",
+                        "error": "#ba1a1a",
+                        "secondary": "#5c5f61",
+                        "tertiary": "#004d70",
+                        "on-background": "#111c2d",
+                        "on-primary": "#ffffff",
+                        "outline": "#777587",
+                        "surface-variant": "#d8e3fb",
+                        "outline-variant": "#c7c4d8",
+                        "surface": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "inverse-surface": "#263143",
+                        "primary-container": "#4f46e5",
+                        "primary-fixed": "#e2dfff",
+                        "background": "#f9f9ff",
+                        "secondary-container": "#e0e3e5",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#001e2f",
+                        "surface-container": "#e7eeff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary-container": "#dad7ff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-tertiary-fixed-variant": "#004c6e"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 sticky z-40 transition-colors duration-200">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a young professional student with a friendly expression in a brightly lit modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVbpFtn3DDmc4scs4P9_VMK-3Cy2jbzA-eYjMr7kJoy-RCjWJ2ydj3YLaxMLIlJ54pa7B2tTrWdSqyoxWCkgBXcB_O3oJH0I-1xdY9Kqyz4r_xmq_ZpXcxC6XEEjWe5IexwZdpnZqu5-YI-Njgp4fIbcIjlrqTPuL_914_fVSX6BiJjMGohEfUz18a1xYw9-G_KjaNTXk5JT7DCyI-A1M1uBjJr_KT1aNLckRR55hQ5x9mGTg-_TpMjV0M_kZclXTm5z2m-zaXUIPA"/>
+</div>
+<h1 class="font-['Manrope'] font-extrabold text-[#3525cd] dark:text-[#4f46e5] text-xl">TaskMate</h1>
+</div>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<main class="max-w-xl mx-auto px-6 pt-8">
+<!-- Section Header -->
+<div class="mb-10">
+<h2 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight mb-2">Subjects</h2>
+<p class="text-on-surface-variant font-body">Organize your academic world by course.</p>
+</div>
+<!-- Subjects List: Intentional Asymmetry & Tonal Depth -->
+<div id="subjects-list" class="space-y-4 mb-12">
+    <!-- Aquí se inyectarán las materias desde Supabase (materias.js) -->
+    <p class="text-center text-on-surface-variant">Cargando materias...</p>
+</div>
+<!-- Add Subject Section -->
+<section class="bg-surface-container-low rounded-2xl p-6 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-headline font-bold text-xl text-on-surface mb-6">Agregar Nueva Materia</h3>
+<div class="space-y-6">
+<!-- Name Input -->
+<div>
+<label class="block text-sm font-label text-on-surface-variant mb-2">Subject Name</label>
+<input id="subject-name" class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="e.g. Organic Chemistry" type="text"/>
+</div>
+<!-- Color Picker -->
+<div>
+<label class="block text-sm font-label text-on-surface-variant mb-3">Identify with Color</label>
+<div class="flex flex-wrap gap-4">
+<button data-color="#3525cd" class="color-picker-btn w-10 h-10 rounded-full bg-[#3525cd] ring-offset-2 ring-2 ring-gray-800"></button>
+<button data-color="#006693" class="color-picker-btn w-10 h-10 rounded-full bg-[#006693] hover:scale-110 transition-transform"></button>
+<button data-color="#ba1a1a" class="color-picker-btn w-10 h-10 rounded-full bg-[#ba1a1a] hover:scale-110 transition-transform"></button>
+<button data-color="#5c5f61" class="color-picker-btn w-10 h-10 rounded-full bg-[#5c5f61] hover:scale-110 transition-transform"></button>
+<button data-color="#f59e0b" class="color-picker-btn w-10 h-10 rounded-full bg-amber-500 hover:scale-110 transition-transform"></button>
+<button data-color="#10b981" class="color-picker-btn w-10 h-10 rounded-full bg-emerald-500 hover:scale-110 transition-transform"></button>
+<button class="w-10 h-10 rounded-full border-2 border-outline-variant flex items-center justify-center text-outline-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Action Button -->
+<button id="save-subject-btn" class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 rounded-xl font-bold font-headline shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                        Save Subject
+                    </button>
+</div>
+</div>
+<!-- Background Decorative Element -->
+<div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./dashboard.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
+</a>
+<!-- Tasks -->
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./tareas.html">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Tasks</span>
+</a>
+<!-- Calendar -->
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] transition-colors" href="./calendario.html">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendar</span>
+</a>
+<!-- Subjects (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-[#4f46e5] text-white rounded-2xl p-2 scale-110 shadow-lg shadow-primary/20 transition-all duration-150 active:scale-95" href="./materias.html">
+<span class="material-symbols-outlined" data-icon="category" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Subjects</span>
+</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/materias.js"></script>
+<script src="./js/pwa-setup.js"></script>
+</body></html>

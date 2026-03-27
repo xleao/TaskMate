@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskMate - Calendar View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed": "#c9e6ff",
+              "surface-dim": "#cfdaf2",
+              "on-surface-variant": "#464555",
+              "on-secondary-fixed-variant": "#444749",
+              "tertiary-container": "#006693",
+              "primary-fixed-dim": "#c3c0ff",
+              "secondary-fixed": "#e0e3e5",
+              "on-primary-fixed-variant": "#3323cc",
+              "on-secondary-fixed": "#191c1e",
+              "on-secondary-container": "#626567",
+              "inverse-primary": "#c3c0ff",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#b8e0ff",
+              "primary": "#3525cd",
+              "on-error-container": "#93000a",
+              "surface-bright": "#f9f9ff",
+              "surface-container-high": "#dee8ff",
+              "tertiary-fixed-dim": "#89ceff",
+              "secondary-fixed-dim": "#c4c7c9",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "surface-tint": "#4d44e3",
+              "on-surface": "#111c2d",
+              "error": "#ba1a1a",
+              "secondary": "#5c5f61",
+              "tertiary": "#004d70",
+              "on-background": "#111c2d",
+              "on-primary": "#ffffff",
+              "outline": "#777587",
+              "surface-variant": "#d8e3fb",
+              "outline-variant": "#c7c4d8",
+              "surface": "#f9f9ff",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#d8e3fb",
+              "inverse-surface": "#263143",
+              "primary-container": "#4f46e5",
+              "primary-fixed": "#e2dfff",
+              "background": "#f9f9ff",
+              "secondary-container": "#e0e3e5",
+              "on-primary-fixed": "#0f0069",
+              "on-tertiary-fixed": "#001e2f",
+              "surface-container": "#e7eeff",
+              "surface-container-low": "#f0f3ff",
+              "on-primary-container": "#dad7ff",
+              "inverse-on-surface": "#ecf1ff",
+              "on-tertiary-fixed-variant": "#004c6e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "1rem", "xl": "1.25rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9ff] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto docked full-width top-0 sticky z-40">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a young male student with a focused expression in a bright library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAlATYGGsmFJWKeUJH-ne35ZPcs51v-2nbCtM0Rm8tYqZ23mdgOL9JLCuRxrC8d3jEk6PN-0BsoStQ8Cd8WrRHLS--PXqDkrWgpPTN1hoMUbphy5vgjmO9PW3GlGdt0rfoficQW4QzKJlLwJ_101HSUrxtWRn-lQtGVeTAqmf0kZcHKgIgatgulOCAcF3ja4gz5V6py2f2YXRXUKaQyNJkKDtOjm5GTZbFKRNqFKEPXLo2bwxsn_34FdEFnohwVTJpDD3uiDZTJgJ1"/>
+</div>
+<span class="text-xl font-extrabold text-[#3525cd] dark:text-[#4f46e5]">TaskMate</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
+<span class="material-symbols-outlined text-slate-500">search</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-4 space-y-8">
+<!-- View Toggle & Header -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-3xl font-extrabold tracking-tight text-on-surface">Calendar</h1>
+<p class="text-on-surface-variant font-medium">Manage your academic schedule</p>
+</div>
+<div class="bg-surface-container-high p-1 rounded-xl flex items-center w-fit">
+<button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all text-on-surface-variant hover:text-primary">Semanal</button>
+<button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all bg-surface-container-lowest text-primary shadow-sm">Mensual</button>
+</div>
+</section>
+<!-- Calendar Grid Layout -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Monthly Calendar Shell -->
+<div class="lg:col-span-8 bg-surface-container-low rounded-xl p-6">
+<!-- Calendar Controls -->
+<div class="flex items-center justify-between mb-8">
+<h2 id="month-title" class="text-xl font-bold text-on-surface">Cargando...</h2>
+<div class="flex gap-2">
+<button id="prev-month-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-lowest text-primary hover:bg-primary-container hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button id="next-month-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-lowest text-primary hover:bg-primary-container hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-px bg-outline-variant/10 rounded-lg overflow-hidden">
+<!-- Days Header -->
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Lun</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Mar</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Mié</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Jue</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Vie</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Sáb</div>
+<div class="bg-surface-container-low py-4 text-center text-xs font-bold text-on-surface-variant tracking-widest uppercase">Dom</div>
+
+<!-- Dynamic Grid container -->
+<div id="calendar-grid-cells" class="col-span-7 grid grid-cols-7 gap-px bg-outline-variant/10">
+    <!-- JS inyectará los días aquí -->
+</div>
+</div>
+</div>
+<!-- Day Details Sidebar -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<div>
+<p class="text-label-sm font-bold text-primary uppercase tracking-wider">Día Seleccionado</p>
+<h3 id="selected-day-title" class="text-2xl font-extrabold text-on-surface">Selecciona un día</h3>
+</div>
+<a href="./tareas.html" class="bg-primary-container text-on-primary w-10 h-10 flex items-center justify-center rounded-full hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+</a>
+</div>
+<div id="day-tasks-list" class="space-y-4">
+    <!-- Tasks Will Go Here -->
+    <p class="text-sm text-on-surface-variant text-center my-8">Haz clic en un día del calendario para ver tus tareas.</p>
+</div>
+</div>
+<!-- Subjects Legend / Mini Stats -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h4 class="font-bold text-on-surface mb-4">Focus areas this month</h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-sm font-medium text-on-surface-variant">Mathematics</span>
+</div>
+<span class="text-sm font-bold text-on-surface">12 tasks</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
+<span class="text-sm font-medium text-on-surface-variant">Humanities</span>
+</div>
+<span class="text-sm font-bold text-on-surface">8 tasks</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="text-sm font-medium text-on-surface-variant">Deadlines</span>
+</div>
+<span class="text-sm font-bold text-on-surface">3 critical</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./tareas.html">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#4f46e5] text-white rounded-2xl p-2 scale-110 transition-transform active:scale-95 duration-150" href="./calendario.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./materias.html">
+<span class="material-symbols-outlined">category</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Subjects</span>
+</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/calendario.js"></script>
+<script src="./js/pwa-setup.js"></script>
+</body></html>

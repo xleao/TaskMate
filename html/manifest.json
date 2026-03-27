@@ -1,0 +1,22 @@
+{
+  "name": "TaskMate - Universitario",
+  "short_name": "TaskMate",
+  "description": "Sistema de Gestión de Tareas Universitarias",
+  "start_url": "./dashboard.html",
+  "display": "standalone",
+  "background_color": "#f9f9ff",
+  "theme_color": "#3525cd",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9028/9028038.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/9028/9028038.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

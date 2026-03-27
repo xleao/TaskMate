@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskMate - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed": "#c9e6ff",
+              "surface-dim": "#cfdaf2",
+              "on-surface-variant": "#464555",
+              "on-secondary-fixed-variant": "#444749",
+              "tertiary-container": "#006693",
+              "primary-fixed-dim": "#c3c0ff",
+              "secondary-fixed": "#e0e3e5",
+              "on-primary-fixed-variant": "#3323cc",
+              "on-secondary-fixed": "#191c1e",
+              "on-secondary-container": "#626567",
+              "inverse-primary": "#c3c0ff",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#b8e0ff",
+              "primary": "#3525cd",
+              "on-error-container": "#93000a",
+              "surface-bright": "#f9f9ff",
+              "surface-container-high": "#dee8ff",
+              "tertiary-fixed-dim": "#89ceff",
+              "secondary-fixed-dim": "#c4c7c9",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "surface-tint": "#4d44e3",
+              "on-surface": "#111c2d",
+              "error": "#ba1a1a",
+              "secondary": "#5c5f61",
+              "tertiary": "#004d70",
+              "on-background": "#111c2d",
+              "on-primary": "#ffffff",
+              "outline": "#777587",
+              "surface-variant": "#d8e3fb",
+              "outline-variant": "#c7c4d8",
+              "surface": "#f9f9ff",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#d8e3fb",
+              "inverse-surface": "#263143",
+              "primary-container": "#4f46e5",
+              "primary-fixed": "#e2dfff",
+              "background": "#f9f9ff",
+              "secondary-container": "#e0e3e5",
+              "on-primary-fixed": "#0f0069",
+              "on-tertiary-fixed": "#001e2f",
+              "surface-container": "#e7eeff",
+              "surface-container-low": "#f0f3ff",
+              "on-primary-container": "#dad7ff",
+              "inverse-on-surface": "#ecf1ff",
+              "on-tertiary-fixed-variant": "#004c6e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(12px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9ff] dark:bg-slate-950 sticky top-0 z-40">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest ring-2 ring-primary-container/20">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="portrait of a young college student smiling slightly, clean background, soft studio lighting, professional and friendly aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3qxdAG0W-Tl4hNE11ALxs-OapWaw1xeQVKDdkIkI0GE-WgYSgF1Ds8B_bnKO3hRm2Q0s1oh93dfgSaIUNiJcbWhJOX6aUclxgHxfyLD1KHD2rmGhihgUz6qfyk2FeQJKfsRckfXxanf_dBut17BQSeaEmrceSKRO50TINI6Ty7_N8ttVCPrV9-yOec3sHxMlxVPGPjdiK7G1IN0i4eXtJKG6XEf3clP8g7jM7Unc52TGT6tqrF_9z5G_ihiOhBJHwUcDWhSSvsGy5"/>
+</div>
+<span class="text-xl font-extrabold text-[#3525cd] dark:text-[#4f46e5] font-headline">TaskMate</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">search</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pt-8 space-y-8">
+<!-- Greeting Section -->
+<section class="space-y-2">
+<h1 id="user-greeting" class="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Hola</h1>
+<p class="text-on-surface-variant font-medium">Es un buen día para avanzar en tus objetivos.</p>
+</section>
+<!-- Alerts Banner (Intentional Asymmetry) -->
+<section class="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-[0_12px_32px_-4px_rgba(53,37,205,0.15)]">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+<div>
+<p id="alerts-text" class="font-headline font-bold text-lg leading-snug">Calculando alertas...</p>
+<p class="text-on-primary-container text-sm font-medium opacity-90 mt-1">Revisa tu calendario para no perder el ritmo.</p>
+</div>
+</div>
+<button onclick="window.location.href='./tareas.html'" class="bg-surface-container-lowest text-primary font-bold px-6 py-2.5 rounded-xl self-start md:self-center hover:bg-opacity-90 transition-all active:scale-95 text-sm">
+                    Ver Tareas
+                </button>
+</div>
+<!-- Decorative circle -->
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+</section>
+<!-- Vista Rápida Section (Bento Grid Style) -->
+<section class="space-y-4">
+<h2 class="font-headline text-xl font-bold text-on-surface">Vista Rápida</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-low p-6 rounded-2xl flex flex-col justify-between group hover:bg-surface-container transition-colors cursor-default">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary text-3xl">pending_actions</span>
+<span class="text-xs font-bold uppercase tracking-wider text-primary/60">En Espera</span>
+</div>
+<div class="mt-4">
+<span id="stat-pendiente" class="text-4xl font-extrabold text-on-surface">...</span>
+<p class="text-on-surface-variant font-medium text-sm mt-1">Pendientes</p>
+</div>
+</div>
+<div class="bg-tertiary-fixed p-6 rounded-2xl flex flex-col justify-between hover:shadow-sm transition-all cursor-default">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary text-3xl">cyclone</span>
+<span class="text-xs font-bold uppercase tracking-wider text-tertiary/60">Activo</span>
+</div>
+<div class="mt-4">
+<span id="stat-progreso" class="text-4xl font-extrabold text-on-tertiary-fixed">...</span>
+<p class="text-on-tertiary-fixed-variant font-medium text-sm mt-1">En Progreso</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/15 p-6 rounded-2xl flex flex-col justify-between hover:bg-surface-container-low transition-colors cursor-default">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">task_alt</span>
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant/60">Logrado</span>
+</div>
+<div class="mt-4">
+<span id="stat-completada" class="text-4xl font-extrabold text-on-surface">...</span>
+<p class="text-on-surface-variant font-medium text-sm mt-1">Completadas</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tareas Próximas Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h2 class="font-headline text-xl font-bold text-on-surface">Tareas Próximas</h2>
+<button onclick="window.location.href='./tareas.html'" class="text-primary font-bold text-sm hover:underline">Ver Todo</button>
+</div>
+<div id="upcoming-tasks-list" class="space-y-3">
+    <!-- Cargar tareas desde JS aquí -->
+    <p class="text-center text-on-surface-variant text-sm mt-4">Actualizando información...</p>
+</div>
+</section>
+<!-- Featured Resource / Tip (Editorial Element) -->
+<section class="pb-10">
+<div class="rounded-3xl overflow-hidden bg-surface-container relative h-48 flex items-end p-8">
+<div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40" data-alt="blurred bookshelves in a modern library with warm ambient light, scholarly atmosphere, peaceful study environment" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiFalHSvZRw02WMcMUiKkPQMnh8O_bkjE3b6s4cIRUhlDQ8UFSPDDB4fHZyxHO-EdRk1bPTKHGV30_93WfIQkDqxTqaP8u5ft4WRcoW44tO7Ig4tyrkrsdWqgRgM9NdPUYio_jiJTGMwxgxYmvSl-5xot0MWDHAD0E3wXNWnq80E08XEY9YIXr8qDGbR4-JoNFGug8Unfny4CRK24ScOR57LSSNNoIqLyuk4S14O74D1aA8ZxroIuJJn9s5pRAflwpjLKX5ON0cLbc')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="relative z-10 max-w-sm">
+<span class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-2 block">Tip Académico</span>
+<h3 class="font-headline text-lg font-bold text-on-surface leading-tight">Optimiza tu tiempo con la técnica Pomodoro en tus tareas.</h3>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Contextual for Dashboard) -->
+<button class="fixed right-6 bottom-24 z-50 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-2xl shadow-xl flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<a class="flex flex-col items-center justify-center bg-[#4f46e5] text-white rounded-2xl p-2 scale-110 transition-transform" href="./dashboard.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./tareas.html">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./calendario.html">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] active:scale-95 duration-150" href="./materias.html">
+<span class="material-symbols-outlined">category</span>
+<span class="font-['Inter'] text-[10px] font-medium mt-1">Subjects</span>
+</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/dashboard.js"></script>
+<script src="./js/pwa-setup.js"></script>
+</body></html>
