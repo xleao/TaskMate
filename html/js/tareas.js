@@ -211,10 +211,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             taskForm.reset();
             cargarMateriasSelect(taskMateriasSelect);
             taskModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         });
     }
     if (closeTaskModalBtn) {
-        closeTaskModalBtn.addEventListener('click', () => taskModal.classList.add('hidden'));
+        closeTaskModalBtn.addEventListener('click', () => {
+             taskModal.classList.add('hidden');
+             document.body.style.overflow = '';
+        });
     }
 
     // --- DETAIL/EDIT MODAL ---
@@ -243,6 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateEstadoChips(tarea.estado);
 
         detailModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function updateEstadoChips(activeEstado) {
@@ -269,12 +274,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Close detail modal
     if (closeDetailModal) {
-        closeDetailModal.addEventListener('click', () => detailModal.classList.add('hidden'));
+        closeDetailModal.addEventListener('click', () => {
+            detailModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
     }
     // Close on backdrop click
     if (detailModal) {
         detailModal.addEventListener('click', (e) => {
-            if (e.target === detailModal) detailModal.classList.add('hidden');
+            if (e.target === detailModal) {
+                detailModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -296,6 +307,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     estado: currentEditEstado
                 });
                 detailModal.classList.add('hidden');
+                document.body.style.overflow = '';
                 await loadAllTareas();
             } catch (err) {
                 alert('Error al guardar: ' + err.message);
@@ -313,6 +325,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     await window.api.deleteTarea(editTaskId.value);
                     detailModal.classList.add('hidden');
+                    document.body.style.overflow = '';
                     await loadAllTareas();
                 } catch (err) {
                     alert('Error al eliminar: ' + err.message);
