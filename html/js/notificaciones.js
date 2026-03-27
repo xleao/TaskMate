@@ -11,21 +11,28 @@ class NotificationManager {
         
         // Primera revisión unos segundos después de cargar la app
         setTimeout(() => this.checkTasks(), 5000); 
+
+        // Refuerzo para iOS y Safari: Revisar inmediatamente cuando el usuario vuelve a abrir la app (foreground)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                this.checkTasks();
+            }
+        });
     }
 
     async checkTasks() {
-        // Solo procesar si el usuario permitió notificaciones
         if (Notification.permission !== 'granted') return;
-
-        // Comprobar que hay una sesión iniciada
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (!session) return;
 
         try {
-            // Obtener tareas usando la API que ya tenemos
             const tareas = await window.api.getTareas();
             const now = new Date();
 
+            // Programar notificaciones "cerradas" (background offline)
+            this.scheduleOfflineNotifications(tareas);
+
+            // Revisión de respaldo (fallback por si falla la nativa y la app sigue abierta)
             tareas.forEach(tarea => {
                 if (tarea.estado !== 'pendiente' || !tarea.fecha_entrega) return;
                 
@@ -33,7 +40,6 @@ class NotificationManager {
                 const timeDiffMs = taskDate.getTime() - now.getTime();
                 const timeDiffMinutes = timeDiffMs / (1000 * 60);
 
-                // Si falta 10 minutos o menos (hasta 10.5 para margen de error) y no se ha notificado
                 if (timeDiffMinutes >= 0 && timeDiffMinutes <= 11 && !this.notifiedTasks.has(tarea.id)) {
                     this.showNotification(tarea);
                     this.notifiedTasks.add(tarea.id);
@@ -45,23 +51,63 @@ class NotificationManager {
         }
     }
 
+    async scheduleOfflineNotifications(tareas) {
+        if (!('serviceWorker' in navigator)) return;
+        try {
+            const reg = await navigator.serviceWorker.ready;
+            
+            // Verificar si el navegador soporta Notification Triggers (Android Chrome)
+            if (!('showTrigger' in Notification.prototype)) {
+                return; // Fallback al interval si el navegador no soporta triggers offline
+            }
+
+            const now = new Date();
+            const scheduledTasks = new Set(JSON.parse(localStorage.getItem('scheduledTasks') || '[]'));
+
+            tareas.forEach(tarea => {
+                if (tarea.estado !== 'pendiente' || !tarea.fecha_entrega) return;
+                
+                const taskDate = new Date(tarea.fecha_entrega);
+                const triggerTime = taskDate.getTime() - (10 * 60 * 1000); // 10 mins antes
+
+                // Si es en el futuro y no la hemos programado ya
+                if (triggerTime > now.getTime() && !scheduledTasks.has(tarea.id)) {
+                    const materiaNombre = tarea.materias ? tarea.materias.nombre : 'Sin materia asignada';
+                    const taskTime = taskDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Programar directamente en el Service Worker
+                    reg.showNotification('¡Tarea por Vencer! ⏰', {
+                        body: `La tarea "${tarea.titulo}" (${materiaNombre}) debe entregarse a las ${taskTime}. ¡Prepárate!`,
+                        icon: '../img/logo.jpg',
+                        badge: '../img/logo.jpg',
+                        vibrate: [200, 100, 200, 100, 400],
+                        tag: `task-${tarea.id}`,
+                        requireInteraction: true,
+                        data: { url: './tareas.html' },
+                        showTrigger: new TimestampTrigger(triggerTime)
+                    });
+
+                    scheduledTasks.add(tarea.id);
+                }
+            });
+            localStorage.setItem('scheduledTasks', JSON.stringify([...scheduledTasks]));
+        } catch (e) {
+            console.log("Aviso: Programación en segundo plano no soportada plenamente.", e);
+        }
+    }
+
     showNotification(tarea) {
         if (!('serviceWorker' in navigator)) return;
-        
         const materiaNombre = tarea.materias ? tarea.materias.nombre : 'Sin materia asignada';
-        const taskTime = new Date(tarea.fecha_entrega).toLocaleTimeString('es-ES', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+        const taskTime = new Date(tarea.fecha_entrega).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         
-        // Usar Service Worker para enviar una notificación del sistema real, incluso en el celular
         navigator.serviceWorker.ready.then(reg => {
             reg.showNotification('¡Tarea por Vencer! ⏰', {
                 body: `La tarea "${tarea.titulo}" (${materiaNombre}) debe entregarse a las ${taskTime}. ¡Prepárate!`,
-                icon: '../img/logo.jpg', // Logo de TaskMate
-                badge: '../img/logo.jpg', // Icono en la barra de estado
-                vibrate: [200, 100, 200, 100, 400], // Patrón de vibración especial
-                tag: `task-${tarea.id}`, // Agrupador para no duplicar
+                icon: '../img/logo.jpg',
+                badge: '../img/logo.jpg',
+                vibrate: [200, 100, 200, 100, 400],
+                tag: `task-fallback-${tarea.id}`, 
                 requireInteraction: true,
                 data: { url: './tareas.html' }
             });
