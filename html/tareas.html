@@ -2,7 +2,10 @@
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="mobile-web-app-capable" content="yes"/>
 <title>TaskMate - Tasks</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
@@ -81,7 +84,7 @@
     </style>
 <style>
     body {
-      min-height: max(884px, 100dvh);
+      min-height: 100dvh;
     }
   </style>
   </head>
@@ -95,9 +98,14 @@
 </div>
 <span class="text-xl font-extrabold text-[#3525cd] dark:text-[#4f46e5] font-['Manrope']">TaskMate</span>
 </div>
+<div class="flex items-center gap-2">
 <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
 <span class="material-symbols-outlined text-slate-500 dark:text-slate-400" data-icon="search">search</span>
 </button>
+<button onclick="logout()" class="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200" title="Cerrar sesión">
+<span class="material-symbols-outlined text-red-500">logout</span>
+</button>
+</div>
 </div>
 </header>
 <main class="max-w-7xl mx-auto px-6 pt-4">
@@ -213,7 +221,7 @@
 </div>
 
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] bg-[#f9f9ff]/60 dark:bg-slate-900/60 backdrop-blur-xl border-t border-[#c7c4d8]/15 shadow-[0_-12px_32px_-4px_rgba(30,41,59,0.06)] rounded-t-2xl">
 <a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-[#3525cd] dark:hover:text-[#4f46e5] duration-150 active:scale-95" href="./dashboard.html">
 <span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
 <span class="font-['Inter'] text-[10px] font-medium">Dashboard</span>
