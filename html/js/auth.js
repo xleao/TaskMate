@@ -1,6 +1,12 @@
 // Archivo: auth.js
 // Lógica de Autenticación con Usuarios Fijos (Bypass Custom)
 
+// Detectar si estamos en la raíz (index.html) o dentro de html/
+// Si la URL NO contiene "/html/", estamos en la raíz
+const _isRoot = !window.location.pathname.includes('/html/');
+const _htmlBase = _isRoot ? './html/' : './';
+const _rootBase = _isRoot ? './' : '../';
+
 // Definimos los únicos usuarios permitidos y su mapeo a correos internos para Supabase
 const USERS = {
   "milagros": { email: "milagros@taskmate.com", pass: "milagros123" },
@@ -60,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Éxito: Guardar nombre en localStorage solo para visualización
         localStorage.setItem('taskmate_display_name', usernameInput);
         
-        // Redirigir al dashboard
-        window.location.href = './dashboard.html';
+        // Redirigir al dashboard (siempre está dentro de html/)
+        window.location.href = _htmlBase + 'dashboard.html';
 
       } catch (error) {
         alert('Error conectando a Supabase: ' + error.message);
@@ -80,7 +86,8 @@ async function logout() {
   if (error) {
     console.error('Error al cerrar sesión:', error.message);
   }
-  window.location.href = './login.html';
+  // Siempre redirigir al index.html de la raíz
+  window.location.href = _rootBase + 'index.html';
 }
 
 // Verificar sesión activa en las demás páginas
@@ -89,9 +96,11 @@ async function checkUser(currentPage) {
   const user = session?.user;
 
   if (!user && currentPage !== 'login') {
-    window.location.href = './login.html';
+    // Redirigir al login (index.html en la raíz)
+    window.location.href = _rootBase + 'index.html';
   } else if (user && currentPage === 'login') {
-    window.location.href = './dashboard.html';
+    // Redirigir al dashboard (dentro de html/)
+    window.location.href = _htmlBase + 'dashboard.html';
   }
   
   // Agregar el nombre correcto al objeto user si se requiere info visual
