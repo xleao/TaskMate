@@ -84,15 +84,18 @@
         backdrop-filter: blur(12px);
       }
     </style>
-    body {
-      min-height: 100dvh;
-      overflow-x: hidden;
+    html, body {
+      margin: 0;
+      padding: 0;
       width: 100%;
+      height: 100%;
+      overflow-x: hidden;
       position: relative;
     }
-    html {
-      overflow-x: hidden;
-      width: 100%;
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
     }
     /* iOS Safe Area Support */
     .safe-top {
