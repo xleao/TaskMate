@@ -106,7 +106,7 @@
 <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
-<img class="w-full h-full object-cover" data-alt="Close up portrait of a young male student with a focused expression in a bright library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAlATYGGsmFJWKeUJH-ne35ZPcs51v-2nbCtM0Rm8tYqZ23mdgOL9JLCuRxrC8d3jEk6PN-0BsoStQ8Cd8WrRHLS--PXqDkrWgpPTN1hoMUbphy5vgjmO9PW3GlGdt0rfoficQW4QzKJlLwJ_101HSUrxtWRn-lQtGVeTAqmf0kZcHKgIgatgulOCAcF3ja4gz5V6py2f2YXRXUKaQyNJkKDtOjm5GTZbFKRNqFKEPXLo2bwxsn_34FdEFnohwVTJpDD3uiDZTJgJ1"/>
+<img alt="TaskMate Logo" class="w-full h-full object-cover" src="../img/logo.jpg"/>
 </div>
 <span class="text-xl font-extrabold text-[#3525cd] dark:text-[#4f46e5]">TaskMate</span>
 </div>
@@ -128,8 +128,8 @@
 <p class="text-on-surface-variant font-medium">Gestiona tu horario académico</p>
 </div>
 <div class="bg-surface-container-high p-1 rounded-xl flex items-center w-fit">
-<button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all text-on-surface-variant hover:text-primary">Semanal</button>
-<button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all bg-surface-container-lowest text-primary shadow-sm">Mensual</button>
+<button id="view-semanal-btn" class="px-6 py-2 rounded-lg text-sm font-semibold transition-all text-on-surface-variant hover:text-primary">Semanal</button>
+<button id="view-mensual-btn" class="px-6 py-2 rounded-lg text-sm font-semibold transition-all bg-surface-container-lowest text-primary shadow-sm pointer-events-none">Mensual</button>
 </div>
 </section>
 <!-- Calendar Views Wrapper -->
@@ -167,32 +167,15 @@
 </div>
 </div>
 </div>
-<!-- Day Details Sidebar -->
-<div class="lg:col-span-4 space-y-6">
-<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/10">
-<div class="flex items-center justify-between mb-6">
-<div>
-<p class="text-label-sm font-bold text-primary uppercase tracking-wider">Día Seleccionado</p>
-<h3 id="selected-day-title" class="text-2xl font-extrabold text-on-surface">Selecciona un día</h3>
-</div>
-<a href="./tareas.html" class="bg-primary-container text-on-primary w-10 h-10 flex items-center justify-center rounded-full hover:opacity-90 transition-opacity">
-<span class="material-symbols-outlined">add</span>
-</a>
-</div>
-<div id="day-tasks-list" class="space-y-4">
-    <!-- Tasks Will Go Here -->
-    <p class="text-sm text-on-surface-variant text-center my-8">Haz clic en un día del calendario para ver tus tareas.</p>
-</div>
-</div>
-        <!-- Subjects Legend / Mini Stats -->
-        <div class="bg-surface-container-low rounded-xl p-6">
-            <h4 class="font-bold text-on-surface mb-4">Áreas de enfoque este mes</h4>
-            <div id="areas-enfoque-list" class="space-y-3">
-                <p class="text-sm text-on-surface-variant">Cargando datos...</p>
-            </div>
-        </div>
+<!-- Subjects Legend / Mini Stats -->
+<div class="bg-surface-container-low rounded-xl p-6">
+    <h4 class="font-bold text-on-surface mb-4">Áreas de enfoque este mes</h4>
+    <div id="areas-enfoque-list" class="space-y-3">
+        <p class="text-sm text-on-surface-variant">Cargando datos...</p>
     </div>
-    </div> <!-- End Month View Container -->
+</div>
+</div>
+</div> <!-- End Month View Container -->
 
     <!-- Day View Container (Timeline) -->
     <div id="day-view-container" class="hidden bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-2xl border border-outline-variant/15 flex-col">
@@ -208,7 +191,7 @@
         </div>
         
         <!-- Contenedor scroll horizontal -->
-        <div id="timeline-scroll-area" class="relative w-full overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 custom-scrollbar">
+        <div id="timeline-scroll-area" class="relative w-full overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 custom-scrollbar snap-x snap-mandatory">
             <div class="flex items-stretch gap-6 min-w-max pb-4" id="timeline-hours-container">
                 <!-- JS inyectará 24 bloques de hora aquí -->
             </div>

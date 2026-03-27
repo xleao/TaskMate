@@ -110,7 +110,7 @@
 <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest ring-2 ring-primary-container/20">
-<img alt="User Profile" class="w-full h-full object-cover" data-alt="portrait of a young college student smiling slightly, clean background, soft studio lighting, professional and friendly aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3qxdAG0W-Tl4hNE11ALxs-OapWaw1xeQVKDdkIkI0GE-WgYSgF1Ds8B_bnKO3hRm2Q0s1oh93dfgSaIUNiJcbWhJOX6aUclxgHxfyLD1KHD2rmGhihgUz6qfyk2FeQJKfsRckfXxanf_dBut17BQSeaEmrceSKRO50TINI6Ty7_N8ttVCPrV9-yOec3sHxMlxVPGPjdiK7G1IN0i4eXtJKG6XEf3clP8g7jM7Unc52TGT6tqrF_9z5G_ihiOhBJHwUcDWhSSvsGy5"/>
+<img alt="TaskMate Logo" class="w-full h-full object-cover" src="../img/logo.jpg"/>
 </div>
 <span class="text-xl font-extrabold text-[#3525cd] dark:text-[#4f46e5] font-headline">TaskMate</span>
 </div>
@@ -200,16 +200,20 @@
 </div>
 </section>
 </main>
-<button onclick="window.location.href='./tareas.html'" class="fixed right-6 w-16 h-16 bg-gradient-to-br from-primary to-primary-container text-white rounded-2xl flex items-center justify-center active:scale-95 transition-transform" style="bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); z-index: 1000; box-shadow: 0 8px 24px rgba(53,37,205,0.4);">
-<span class="material-symbols-outlined text-3xl">add</span>
-</button>
+</main>
 
 <!-- Task Detail/Edit Modal (Added to Dashboard for Interactivity) -->
-<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all" style="z-index: 10000;">
-    <div class="bg-surface-container-lowest w-full max-w-md rounded-[2.5rem] shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden">
+<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all z-[12000]">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-[2.5rem] shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden animate-[modalScaleIn_0.3s_ease-out]">
+        <style>
+            @keyframes modalScaleIn {
+                from { opacity: 0; transform: scale(0.95) translateY(20px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+        </style>
         <!-- Header -->
-        <div class="sticky top-0 bg-surface-container-lowest px-8 pt-8 pb-4 flex justify-between items-center">
-            <h3 id="detail-modal-title" class="font-headline font-extrabold text-2xl text-on-surface tracking-tight">Detalle de Tarea</h3>
+        <div class="sticky top-0 bg-surface-container-lowest px-8 pt-8 pb-4 flex justify-between items-center text-on-surface">
+            <h3 id="detail-modal-title" class="font-headline font-extrabold text-2xl tracking-tight">Detalle de Tarea</h3>
             <button id="close-detail-modal" class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-slate-100 rounded-full transition-colors">
                 <span class="material-symbols-outlined text-[24px]">close</span>
             </button>
@@ -219,29 +223,29 @@
             <div>
                 <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Estado</label>
                 <div id="detail-estado-chips" class="flex flex-wrap gap-2">
-                    <button data-estado="pendiente" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">⏳ Pendiente</button>
-                    <button data-estado="completada" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">✅ Completada</button>
-                    <button data-estado="vencida" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">❌ Vencida</button>
+                    <button data-estado="pendiente" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high">⏳ Pendiente</button>
+                    <button data-estado="completada" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high">✅ Completada</button>
+                    <button data-estado="vencida" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high">❌ Vencida</button>
                 </div>
             </div>
             <!-- Edit Form -->
             <form id="edit-task-form" class="space-y-4">
                 <input type="hidden" id="edit-task-id"/>
                 <div>
-                    <label class="block text-sm font-semibold text-on-surface-variant mb-1">Título</label>
+                    <label class="block text-sm font-semibold text-on-surface-variant mb-1 text-on-surface">Título</label>
                     <input id="edit-task-title" required class="w-full bg-surface-container border-none rounded-2xl px-4 py-4 text-on-surface focus:ring-2 focus:ring-primary/20" type="text"/>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-on-surface-variant mb-1">Descripción</label>
+                    <label class="block text-sm font-semibold text-on-surface-variant mb-1 text-on-surface">Descripción</label>
                     <textarea id="edit-task-desc" class="w-full bg-surface-container border-none rounded-2xl px-4 py-4 text-on-surface focus:ring-2 focus:ring-primary/20" rows="2"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-on-surface-variant mb-1">Fecha</label>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-1 text-on-surface">Fecha</label>
                         <input id="edit-task-date" required class="w-full bg-surface-container border-none rounded-2xl px-4 py-4 text-on-surface focus:ring-2 focus:ring-primary/20" type="datetime-local"/>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-on-surface-variant mb-1">Prioridad</label>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-1 text-on-surface">Prioridad</label>
                         <select id="edit-task-priority" class="w-full bg-surface-container border-none rounded-2xl px-4 py-4 text-on-surface focus:ring-2 focus:ring-primary/20">
                             <option value="baja">Baja</option>
                             <option value="media">Media</option>
@@ -250,7 +254,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-on-surface-variant mb-1">Materia</label>
+                    <label class="block text-sm font-semibold text-on-surface-variant mb-1 text-on-surface">Materia</label>
                     <select id="edit-task-materia" class="w-full bg-surface-container border-none rounded-2xl px-4 py-4 text-on-surface focus:ring-2 focus:ring-primary/20">
                         <option value="">Sin materia</option>
                     </select>
@@ -266,6 +270,25 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all z-[14000]">
+    <div class="bg-surface-container-lowest w-full max-w-sm rounded-[2rem] shadow-2xl relative p-8 flex flex-col items-center text-center animate-[modalScaleIn_0.3s_ease-out]">
+        <div class="w-16 h-16 bg-red-100/50 text-error rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-[32px]">delete</span>
+        </div>
+        <h3 class="font-headline font-extrabold text-2xl text-on-surface mb-2">¿Eliminar Tarea?</h3>
+        <p class="text-on-surface-variant text-sm mb-8 font-medium">Esta acción es permanente y no podrás recuperar los datos de esta tarea.</p>
+        <div class="flex gap-3 w-full">
+            <button id="cancel-delete-btn" class="flex-1 py-4 bg-surface-container text-on-surface-variant font-bold rounded-2xl active:scale-[0.98] transition-all hover:bg-surface-container-high border border-outline-variant/20 text-on-surface">
+                Cancelar
+            </button>
+            <button id="confirm-delete-btn" class="flex-1 py-4 bg-error text-white font-bold rounded-2xl shadow-lg shadow-error/20 active:scale-[0.98] transition-all hover:bg-red-700">
+                Sí, eliminar
+            </button>
         </div>
     </div>
 </div>

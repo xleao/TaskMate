@@ -29,6 +29,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentDate = new Date();
     let tareasDB = [];
+    let calendarViewMode = 'mensual'; // 'semanal' o 'mensual'
+
+    // Botones de vistas
+    const viewSemanalBtn = document.getElementById('view-semanal-btn');
+    const viewMensualBtn = document.getElementById('view-mensual-btn');
+
+    if (viewSemanalBtn && viewMensualBtn) {
+        viewSemanalBtn.addEventListener('click', () => {
+            calendarViewMode = 'semanal';
+            viewSemanalBtn.classList.replace('text-on-surface-variant', 'text-primary');
+            viewSemanalBtn.classList.replace('hover:text-primary', 'bg-surface-container-lowest');
+            viewSemanalBtn.classList.add('shadow-sm', 'pointer-events-none');
+            
+            viewMensualBtn.classList.replace('text-primary', 'text-on-surface-variant');
+            viewMensualBtn.classList.replace('bg-surface-container-lowest', 'hover:text-primary');
+            viewMensualBtn.classList.remove('shadow-sm', 'pointer-events-none');
+            renderCalendar();
+        });
+
+        viewMensualBtn.addEventListener('click', () => {
+            calendarViewMode = 'mensual';
+            viewMensualBtn.classList.replace('text-on-surface-variant', 'text-primary');
+            viewMensualBtn.classList.replace('hover:text-primary', 'bg-surface-container-lowest');
+            viewMensualBtn.classList.add('shadow-sm', 'pointer-events-none');
+            
+            viewSemanalBtn.classList.replace('text-primary', 'text-on-surface-variant');
+            viewSemanalBtn.classList.replace('bg-surface-container-lowest', 'hover:text-primary');
+            viewSemanalBtn.classList.remove('shadow-sm', 'pointer-events-none');
+            renderCalendar();
+        });
+    }
 
     // Nombres de meses en español
     const monthNames = [
@@ -47,66 +78,109 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!calendarGrid) return;
         
         calendarGrid.innerHTML = '';
-        
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-
-        // Actualizar título (Ej: Octubre 2026)
-        monthTitle.textContent = `${monthNames[month]} ${year}`;
-
-        // Obtener primer día del mes y cantidad de días
-        // getDay() devuelve 0 (Domingo) a 6 (Sábado). Ajustamos para que Lunes sea 1
-        const firstDayOfMonth = new Date(year, month, 1).getDay();
-        const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1; // Espacios vacíos antes del día 1
-        
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-
         const today = new Date();
-        const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
+        const daysToRender = [];
 
-        // Renderizar días del mes anterior (opacos)
-        for (let i = startOffset - 1; i >= 0; i--) {
-            const dayNum = daysInPrevMonth - i;
-            const div = document.createElement('div');
-            div.className = "bg-surface-container-lowest h-24 p-2 text-on-surface-variant/40 text-sm";
-            div.textContent = dayNum;
-            calendarGrid.appendChild(div);
+        if (calendarViewMode === 'mensual') {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            monthTitle.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Días mes anterior
+            for (let i = startOffset - 1; i >= 0; i--) {
+                daysToRender.push({
+                    date: new Date(year, month - 1, daysInPrevMonth - i),
+                    isCurrentMonth: false
+                });
+            }
+            // Días mes actual
+            for (let day = 1; day <= daysInMonth; day++) {
+                daysToRender.push({
+                    date: new Date(year, month, day),
+                    isCurrentMonth: true
+                });
+            }
+            // Días próximo mes para rellenar semana
+            const remainder = daysToRender.length % 7;
+            if (remainder !== 0) {
+                const endFill = 7 - remainder;
+                for (let i = 1; i <= endFill; i++) {
+                    daysToRender.push({
+                        date: new Date(year, month + 1, i),
+                        isCurrentMonth: false
+                    });
+                }
+            }
+        } else {
+            // Vista Semanal
+            const jsDay = currentDate.getDay(); // 0 es domingo
+            const dayOfWeek = jsDay === 0 ? 6 : jsDay - 1; // 0 es Lunes
+            
+            const monday = new Date(currentDate);
+            monday.setDate(currentDate.getDate() - dayOfWeek);
+            
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            
+            if (monday.getMonth() === sunday.getMonth()) {
+                monthTitle.textContent = `${monthNames[monday.getMonth()]} ${monday.getFullYear()}`;
+            } else {
+                monthTitle.textContent = `${monthNames[monday.getMonth()].substring(0,3)} - ${monthNames[sunday.getMonth()].substring(0,3)} ${sunday.getFullYear()}`;
+            }
+
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                daysToRender.push({
+                    date: d,
+                    isCurrentMonth: true // treat all days in a weekly view as fully opaque
+                });
+            }
         }
 
-        // Renderizar días del mes actual
-        for (let day = 1; day <= daysInMonth; day++) {
-            const cellDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        // Renderizado del HTML con la lista daysToRender
+        daysToRender.forEach(cell => {
+            const d = cell.date;
+            const isToday = d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
             
-            // Buscar tareas que caigan en este día
+            if (!cell.isCurrentMonth && calendarViewMode === 'mensual') {
+                const div = document.createElement('div');
+                div.className = "bg-surface-container-lowest h-24 p-2 text-on-surface-variant/40 text-sm";
+                div.textContent = d.getDate();
+                calendarGrid.appendChild(div);
+                return;
+            }
+
             const tareasDelDia = tareasDB.filter(t => {
                 if (!t.fecha_entrega) return false;
-                // La fecha en DB viene en formato ISO
                 const tDate = new Date(t.fecha_entrega);
-                return tDate.getFullYear() === year && 
-                       tDate.getMonth() === month && 
-                       tDate.getDate() === day;
+                return tDate.getFullYear() === d.getFullYear() && tDate.getMonth() === d.getMonth() && tDate.getDate() === d.getDate();
             });
 
             const div = document.createElement('div');
+            // Weekly grid items can have slightly rounded borders on mobile, basically same style
             div.className = "bg-surface-container-lowest h-24 p-2 flex flex-col items-center relative group cursor-pointer hover:bg-surface-container-low transition-colors";
             
-            // Highlight si es hoy
-            if (isCurrentMonth && day === today.getDate()) {
-                div.innerHTML = `
-                    <div class="absolute inset-1 rounded-xl border border-primary/20 bg-primary/5"></div>
-                    <span class="mt-1 font-extrabold text-primary relative z-10">${day}</span>
-                `;
-            } else {
-                div.innerHTML = `<span class="mt-1 font-semibold text-on-surface">${day}</span>`;
+            if (calendarViewMode === 'semanal') {
+                 div.className += " border-x border-outline-variant/10 first:rounded-l-xl last:rounded-r-xl first:border-l-0 last:border-r-0";
             }
 
-            // Puntos de tareas
+            if (isToday) {
+                 // Sutil highlight para hoy en ambos modos
+                 div.innerHTML = `<span class="mt-1 font-extrabold text-primary underline decoration-2 underline-offset-4">${d.getDate()}</span>`;
+            } else {
+                 div.innerHTML = `<span class="mt-1 font-semibold text-on-surface">${d.getDate()}</span>`;
+            }
+
             if (tareasDelDia.length > 0) {
                 const dotsContainer = document.createElement('div');
                 dotsContainer.className = "flex flex-wrap justify-center gap-1 mt-auto pb-2 relative z-10 w-full px-1";
                 
-                // Mostrar hasta 4 puntitos, el resto se esconde
                 tareasDelDia.slice(0, 4).forEach(t => {
                     const materiaInfo = t.materias ? t.materias : { color: '#c4c7c9' };
                     const dot = document.createElement('span');
@@ -114,45 +188,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     dot.style.backgroundColor = materiaInfo.color;
                     dotsContainer.appendChild(dot);
                 });
-
                 if (tareasDelDia.length > 4) {
                     const plus = document.createElement('span');
                     plus.className = "text-[10px] font-bold text-on-surface-variant leading-none";
                     plus.textContent = "+";
                     dotsContainer.appendChild(plus);
                 }
-                
                 div.appendChild(dotsContainer);
             }
 
-            // Evento al clicar el día
             div.addEventListener('click', () => {
-                mostrarTareasDelDia(day, month, year, tareasDelDia);
+                mostrarTareasDelDia(d.getDate(), d.getMonth(), d.getFullYear(), tareasDelDia);
             });
 
             calendarGrid.appendChild(div);
-        }
+        });
 
-        // Render Áreas de Enfoque (para todos los tasks del mes)
+        // Áreas de Enfoque usando el mes actual de `currentDate`
         const tareasDelMes = tareasDB.filter(t => {
             if (!t.fecha_entrega) return false;
             const tDate = new Date(t.fecha_entrega);
-            return tDate.getFullYear() === year && tDate.getMonth() === month;
+            return tDate.getFullYear() === currentDate.getFullYear() && tDate.getMonth() === currentDate.getMonth();
         });
         renderAreasEnfoque(tareasDelMes);
-
-        // Rellenar final de la grilla (hasta múltiplo de 7)
-        const totalCells = startOffset + daysInMonth;
-        const remainder = totalCells % 7;
-        if (remainder !== 0) {
-            const endFill = 7 - remainder;
-            for (let i = 1; i <= endFill; i++) {
-                const div = document.createElement('div');
-                div.className = "bg-surface-container-lowest h-24 p-2 text-on-surface-variant/40 text-sm";
-                div.textContent = i;
-                calendarGrid.appendChild(div);
-            }
-        }
     }
 
     // Mostrar tareas del día clickeado en la barra lateral
@@ -177,7 +235,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             const hourDiv = document.createElement('div');
-            hourDiv.className = "w-72 md:w-80 flex-shrink-0 bg-surface-container-lowest rounded-3xl p-6 shadow-md border border-outline-variant/10 min-h-[300px] flex flex-col hover:border-primary/20 transition-all";
+            hourDiv.className = "w-72 md:w-80 flex-shrink-0 bg-surface-container-lowest rounded-3xl p-6 shadow-md border border-outline-variant/10 min-h-[300px] flex flex-col hover:border-primary/20 transition-all snap-center";
             
             const hourText = i === 0 ? '12:00 AM' : (i < 12 ? `${i}:00 AM` : (i === 12 ? '12:00 PM' : `${i-12}:00 PM`));
             
@@ -357,14 +415,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Controles de mes
     if (prevMonthBtn) {
         prevMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
+            if (calendarViewMode === 'mensual') {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+            } else {
+                currentDate.setDate(currentDate.getDate() - 7);
+            }
             renderCalendar();
         });
     }
     
     if (nextMonthBtn) {
         nextMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
+            if (calendarViewMode === 'mensual') {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            } else {
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
             renderCalendar();
         });
     }

@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentEditEstado = '';
     let activeFilters = {
         materia: '',
-        estado: '',
+        estado: 'pendiente',
         prioridad: '',
         search: ''
     };
@@ -328,11 +328,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveBtn.disabled = true;
             saveBtn.textContent = 'Guardando...';
 
+            // Convert local input value to ISO with timezone offset
+            const inputDate = new Date(editDate.value);
+            const offset = -inputDate.getTimezoneOffset();
+            const sign = offset >= 0 ? '+' : '-';
+            const pad = num => String(Math.floor(Math.abs(num))).padStart(2, '0');
+            const isoWithOffset = inputDate.getFullYear() +
+                '-' + pad(inputDate.getMonth() + 1) +
+                '-' + pad(inputDate.getDate()) +
+                'T' + pad(inputDate.getHours()) +
+                ':' + pad(inputDate.getMinutes()) +
+                ':' + pad(inputDate.getSeconds()) +
+                sign + pad(offset / 60) +
+                ':' + pad(offset % 60);
+
             try {
                 await window.api.updateTarea(editTaskId.value, {
                     titulo: editTitle.value,
                     descripcion: editDesc.value,
-                    fecha_entrega: editDate.value,
+                    fecha_entrega: isoWithOffset,
                     prioridad: editPriority.value,
                     materia_id: editMateria.value || null,
                     estado: currentEditEstado
@@ -517,12 +531,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             const titulo = document.getElementById('task-title').value;
             const descripcion = document.getElementById('task-desc').value;
             const materia_id = document.getElementById('task-materia').value || null;
-            const fecha_entrega = document.getElementById('task-date').value;
+            const rawDate = document.getElementById('task-date').value;
+            const inputDate = new Date(rawDate);
+            const offset = -inputDate.getTimezoneOffset();
+            const sign = offset >= 0 ? '+' : '-';
+            const pad = num => String(Math.floor(Math.abs(num))).padStart(2, '0');
+            const isoWithOffset = inputDate.getFullYear() +
+                '-' + pad(inputDate.getMonth() + 1) +
+                '-' + pad(inputDate.getDate()) +
+                'T' + pad(inputDate.getHours()) +
+                ':' + pad(inputDate.getMinutes()) +
+                ':' + pad(inputDate.getSeconds()) +
+                sign + pad(offset / 60) +
+                ':' + pad(offset % 60);
+
             const prioridad = document.getElementById('task-priority').value;
 
             try {
                 await window.api.addTarea({
-                    titulo, descripcion, materia_id, fecha_entrega, prioridad, estado: 'pendiente'
+                    titulo, descripcion, materia_id, fecha_entrega: isoWithOffset, prioridad, estado: 'pendiente'
                 });
                 taskModal.classList.add('hidden');
                 document.documentElement.style.overflow = '';
@@ -540,5 +567,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize
     await cargarMateriasFiltro();
+    updateFilterChipStyle('estado', 'pendiente'); // Highlight the Pendiente chip by default
     await loadAllTareas();
 });

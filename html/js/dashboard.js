@@ -100,17 +100,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             const btn = document.getElementById('save-edit-btn');
             btn.disabled = true;
             btn.textContent = 'Guardando...';
+
+            const rawDate = editDate.value;
+            const inputDate = new Date(rawDate);
+            const offset = -inputDate.getTimezoneOffset();
+            const sign = offset >= 0 ? '+' : '-';
+            const pad = num => String(Math.floor(Math.abs(num))).padStart(2, '0');
+            const isoWithOffset = inputDate.getFullYear() +
+                '-' + pad(inputDate.getMonth() + 1) +
+                '-' + pad(inputDate.getDate()) +
+                'T' + pad(inputDate.getHours()) +
+                ':' + pad(inputDate.getMinutes()) +
+                ':' + pad(inputDate.getSeconds()) +
+                sign + pad(offset / 60) +
+                ':' + pad(offset % 60);
+
             try {
                 await window.api.updateTarea(editTaskId.value, {
                     titulo: editTitle.value,
                     descripcion: editDesc.value,
-                    fecha_entrega: editDate.value,
+                    fecha_entrega: isoWithOffset,
                     prioridad: editPriority.value,
                     materia_id: editMateria.value || null,
                     estado: currentEditEstado
                 });
                 detailModal.classList.add('hidden');
-                cargarDashboard(); // Recargar datos
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                cargarDashboard();
             } catch (err) {
                 alert('Error: ' + err.message);
             } finally {
@@ -120,12 +137,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+    const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
     if (deleteDetailBtn) {
-        deleteDetailBtn.addEventListener('click', async () => {
-            if (confirm('¿Eliminar esta tarea?')) {
+        deleteDetailBtn.addEventListener('click', () => {
+            deleteConfirmModal.classList.remove('hidden');
+        });
+    }
+
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteConfirmModal.classList.add('hidden');
+        });
+    }
+
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', async () => {
+            confirmDeleteBtn.disabled = true;
+            confirmDeleteBtn.textContent = 'Eliminando...';
+            try {
                 await window.api.deleteTarea(editTaskId.value);
+                deleteConfirmModal.classList.add('hidden');
                 detailModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
                 cargarDashboard();
+            } catch (err) {
+                alert('Error al eliminar: ' + err.message);
+            } finally {
+                confirmDeleteBtn.disabled = false;
+                confirmDeleteBtn.textContent = 'Sí, eliminar';
             }
         });
     }
