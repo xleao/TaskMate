@@ -1,5 +1,5 @@
 // Archivo: tareas.js
-// Lógica para renderizar, filtrar y gestionar tareas
+// Lógica para renderizar, filtrar y gestionar tareas con CRUD completo
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Verificar sesión
@@ -18,13 +18,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressCount = document.getElementById('progress-count');
     const progressBar = document.getElementById('progress-bar');
 
-    // Selectores del modal
+    // Detail/Edit Modal elements
+    const detailModal = document.getElementById('task-detail-modal');
+    const closeDetailModal = document.getElementById('close-detail-modal');
+    const editForm = document.getElementById('edit-task-form');
+    const editTaskId = document.getElementById('edit-task-id');
+    const editTitle = document.getElementById('edit-task-title');
+    const editDesc = document.getElementById('edit-task-desc');
+    const editDate = document.getElementById('edit-task-date');
+    const editPriority = document.getElementById('edit-task-priority');
+    const editMateria = document.getElementById('edit-task-materia');
+    const editEstadoChips = document.getElementById('detail-estado-chips');
+    const deleteDetailBtn = document.getElementById('delete-task-detail-btn');
+
+    // Selectores del modal de creación
     const taskMateriasSelect = document.getElementById('task-materia');
 
     // --- FILTER STATE ---
     let allTareas = [];
+    let currentEditEstado = '';
     let activeFilters = {
-        materia: '', // materia_id or ''
+        materia: '',
         estado: '',
         prioridad: '',
         search: ''
@@ -44,11 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Toggle dropdown visibility
     function toggleDropdown(name) {
-        // Close all other dropdowns first
         Object.keys(filterDropdowns).forEach(key => {
-            if (key !== name) {
-                filterDropdowns[key].classList.add('hidden');
-            }
+            if (key !== name) filterDropdowns[key].classList.add('hidden');
         });
         filterDropdowns[name].classList.toggle('hidden');
     }
@@ -70,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Prevent dropdown click from closing itself
     Object.values(filterDropdowns).forEach(dd => {
         dd.addEventListener('click', (e) => e.stopPropagation());
     });
@@ -101,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- FILTER: Materia (dynamic, populated from DB) ---
+    // --- FILTER: Materia (dynamic) ---
     async function cargarMateriasFiltro() {
         const materiaOptionsContainer = document.getElementById('filter-materia-options');
         if (!materiaOptionsContainer) return;
@@ -117,7 +127,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             materiaOptionsContainer.appendChild(btn);
         });
 
-        // Add click listeners
         materiaOptionsContainer.querySelectorAll('.filter-option').forEach(btn => {
             btn.addEventListener('click', () => {
                 activeFilters.materia = btn.dataset.value;
@@ -128,26 +137,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- UPDATE CHIP STYLE (active vs inactive) ---
+    // --- UPDATE CHIP STYLE ---
     function updateFilterChipStyle(filterName, value) {
         const btn = filterButtons[filterName];
         if (!btn) return;
 
         if (value) {
-            // Active state
             btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
             btn.classList.add('bg-primary', 'text-on-primary');
         } else {
-            // Inactive state
             btn.classList.remove('bg-primary', 'text-on-primary');
             btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
         }
 
-        // Show/hide clear button
         const hasAnyFilter = activeFilters.materia || activeFilters.estado || activeFilters.prioridad || activeFilters.search;
-        if (clearFiltersBtn) {
-            clearFiltersBtn.classList.toggle('hidden', !hasAnyFilter);
-        }
+        if (clearFiltersBtn) clearFiltersBtn.classList.toggle('hidden', !hasAnyFilter);
     }
 
     // --- SEARCH ---
@@ -171,19 +175,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- APPLY FILTERS & RENDER ---
+    // --- APPLY FILTERS ---
     function applyFilters() {
         let filtered = [...allTareas];
-
-        if (activeFilters.materia) {
-            filtered = filtered.filter(t => t.materia_id === activeFilters.materia);
-        }
-        if (activeFilters.estado) {
-            filtered = filtered.filter(t => t.estado === activeFilters.estado);
-        }
-        if (activeFilters.prioridad) {
-            filtered = filtered.filter(t => t.prioridad === activeFilters.prioridad);
-        }
+        if (activeFilters.materia) filtered = filtered.filter(t => t.materia_id === activeFilters.materia);
+        if (activeFilters.estado) filtered = filtered.filter(t => t.estado === activeFilters.estado);
+        if (activeFilters.prioridad) filtered = filtered.filter(t => t.prioridad === activeFilters.prioridad);
         if (activeFilters.search) {
             filtered = filtered.filter(t => {
                 const titulo = (t.titulo || '').toLowerCase();
@@ -192,39 +189,139 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return titulo.includes(activeFilters.search) || desc.includes(activeFilters.search) || materia.includes(activeFilters.search);
             });
         }
-
         renderFilteredTareas(filtered);
     }
 
-    // Cargar materias para el select del modal
-    async function cargarMateriasSelect() {
-        if (!taskMateriasSelect) return;
+    // --- LOAD MATERIAS FOR SELECT ---
+    async function cargarMateriasSelect(selectEl) {
+        if (!selectEl) return;
         const materias = await window.api.getMaterias();
-        taskMateriasSelect.innerHTML = '<option value="">Sin Materia</option>';
+        selectEl.innerHTML = '<option value="">Sin Materia</option>';
         materias.forEach(m => {
             const opt = document.createElement('option');
             opt.value = m.id;
             opt.textContent = m.nombre;
-            taskMateriasSelect.appendChild(opt);
+            selectEl.appendChild(opt);
         });
     }
 
-    // Modal behavior
+    // --- CREATE MODAL ---
     if (addTaskBtn) {
         addTaskBtn.addEventListener('click', () => {
             taskForm.reset();
-            cargarMateriasSelect();
+            cargarMateriasSelect(taskMateriasSelect);
             taskModal.classList.remove('hidden');
         });
     }
-
     if (closeTaskModalBtn) {
-        closeTaskModalBtn.addEventListener('click', () => {
-            taskModal.classList.add('hidden');
+        closeTaskModalBtn.addEventListener('click', () => taskModal.classList.add('hidden'));
+    }
+
+    // --- DETAIL/EDIT MODAL ---
+    function openDetailModal(tarea) {
+        if (!detailModal) return;
+
+        editTaskId.value = tarea.id;
+        editTitle.value = tarea.titulo;
+        editDesc.value = tarea.descripcion || '';
+        editPriority.value = tarea.prioridad;
+        currentEditEstado = tarea.estado;
+
+        // Format date for datetime-local input
+        if (tarea.fecha_entrega) {
+            const d = new Date(tarea.fecha_entrega);
+            const pad = n => String(n).padStart(2, '0');
+            editDate.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+
+        // Load materias and set current
+        cargarMateriasSelect(editMateria).then(() => {
+            editMateria.value = tarea.materia_id || '';
+        });
+
+        // Set estado chips
+        updateEstadoChips(tarea.estado);
+
+        detailModal.classList.remove('hidden');
+    }
+
+    function updateEstadoChips(activeEstado) {
+        if (!editEstadoChips) return;
+        editEstadoChips.querySelectorAll('.estado-chip').forEach(chip => {
+            const estado = chip.dataset.estado;
+            if (estado === activeEstado) {
+                chip.className = 'estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all bg-primary text-white shadow-md';
+            } else {
+                chip.className = 'estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all bg-surface-container-high text-on-surface-variant';
+            }
+        });
+        currentEditEstado = activeEstado;
+    }
+
+    // Estado chip clicks
+    if (editEstadoChips) {
+        editEstadoChips.querySelectorAll('.estado-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                updateEstadoChips(chip.dataset.estado);
+            });
         });
     }
 
-    // Formatear Fecha
+    // Close detail modal
+    if (closeDetailModal) {
+        closeDetailModal.addEventListener('click', () => detailModal.classList.add('hidden'));
+    }
+    // Close on backdrop click
+    if (detailModal) {
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) detailModal.classList.add('hidden');
+        });
+    }
+
+    // Save edits
+    if (editForm) {
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('save-edit-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Guardando...';
+
+            try {
+                await window.api.updateTarea(editTaskId.value, {
+                    titulo: editTitle.value,
+                    descripcion: editDesc.value,
+                    fecha_entrega: editDate.value,
+                    prioridad: editPriority.value,
+                    materia_id: editMateria.value || null,
+                    estado: currentEditEstado
+                });
+                detailModal.classList.add('hidden');
+                await loadAllTareas();
+            } catch (err) {
+                alert('Error al guardar: ' + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Guardar Cambios';
+            }
+        });
+    }
+
+    // Delete from detail modal
+    if (deleteDetailBtn) {
+        deleteDetailBtn.addEventListener('click', async () => {
+            if (confirm('¿Seguro de borrar esta tarea?')) {
+                try {
+                    await window.api.deleteTarea(editTaskId.value);
+                    detailModal.classList.add('hidden');
+                    await loadAllTareas();
+                } catch (err) {
+                    alert('Error al eliminar: ' + err.message);
+                }
+            }
+        });
+    }
+
+    // --- HELPERS ---
     function formatFecha(isoString) {
         const d = new Date(isoString);
         return d.toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -237,28 +334,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function getStateBadge(estado) {
-        if (estado === 'pendiente') return `<span class="bg-secondary-container text-secondary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter cursor-pointer switch-state-btn">Pendiente</span>`;
-        if (estado === 'en_progreso') return `<span class="bg-primary-container text-primary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter cursor-pointer switch-state-btn">En progreso</span>`;
-        if (estado === 'completada') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter cursor-pointer switch-state-btn">Completada</span>`;
-        return `<span class="bg-error-container text-error px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter cursor-pointer switch-state-btn">Vencida</span>`;
+        if (estado === 'pendiente') return `<span class="bg-secondary-container text-secondary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Pendiente</span>`;
+        if (estado === 'en_progreso') return `<span class="bg-primary-container text-primary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">En progreso</span>`;
+        if (estado === 'completada') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Completada</span>`;
+        return `<span class="bg-error-container text-error px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Vencida</span>`;
     }
 
-    // --- UPDATE WEEKLY PROGRESS FROM DB ---
+    // --- WEEKLY PROGRESS ---
     function updateWeeklyProgress() {
         if (!progressPercent || !progressCount || !progressBar) return;
 
-        // Get start of current week (Monday)
         const now = new Date();
         const dayOfWeek = now.getDay();
         const monday = new Date(now);
         monday.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
         monday.setHours(0, 0, 0, 0);
-
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6);
         sunday.setHours(23, 59, 59, 999);
 
-        // Filter tasks that have fecha_entrega within this week
         const weekTasks = allTareas.filter(t => {
             const fecha = new Date(t.fecha_entrega);
             return fecha >= monday && fecha <= sunday;
@@ -273,7 +367,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         progressBar.style.width = `${percent}%`;
     }
 
-    // Renderizar Tareas (filtradas)
+    // --- RENDER TASKS ---
     function renderFilteredTareas(tareas) {
         if (!tasksList) return;
 
@@ -283,15 +377,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="text-center py-8 col-span-full">
                     <span class="material-symbols-outlined text-4xl text-outline mb-2">${hasFilters ? 'filter_alt' : 'assignment'}</span>
                     <p class="text-outline font-medium">${hasFilters ? 'No se encontraron tareas con estos filtros.' : 'Aún no tienes tareas asignadas.'}</p>
-                </div>
-            `;
+                </div>`;
             return;
         }
 
         tasksList.innerHTML = '';
         tareas.forEach(t => {
             const div = document.createElement('div');
-            div.className = "bg-surface-container-lowest p-5 rounded-xl transition-all hover:translate-y-[-2px] relative";
+            div.className = "bg-surface-container-lowest p-5 rounded-xl transition-all hover:translate-y-[-2px] relative cursor-pointer active:scale-[0.98]";
             
             const materiaInfo = t.materias ? t.materias : { nombre: 'Sin materia', color: '#c4c7c9' };
             const priorityColor = getPriorityColor(t.prioridad);
@@ -304,9 +397,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="w-2.5 h-2.5 rounded-full" style="background-color: ${materiaInfo.color}"></div>
                             <span class="text-xs font-semibold text-outline uppercase tracking-wider font-label">${materiaInfo.nombre}</span>
                         </div>
-                        <div data-id="${t.id}" data-estado="${t.estado}">
-                            ${getStateBadge(t.estado)}
-                        </div>
+                        ${getStateBadge(t.estado)}
                     </div>
                     <h3 class="text-lg font-bold text-on-surface font-headline leading-tight mb-2 ${isCompleted ? 'line-through' : ''}">${t.titulo}</h3>
                     ${t.descripcion ? `<p class="text-on-surface-variant text-sm font-body line-clamp-2 mb-4">${t.descripcion}</p>` : '<div class="mb-4"></div>'}
@@ -321,35 +412,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="text-[10px] font-bold uppercase tracking-widest">${t.prioridad}</span>
                         </div>
                     </div>
-                </div>
-                <!-- Delete Layer -->
-                <button class="delete-task-btn absolute -top-2 -right-2 bg-error text-white w-8 h-8 rounded-full shadow-md flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}">
-                    <span class="material-symbols-outlined text-[16px]">close</span>
-                </button>
-            `;
-            // Add class for group so delete button shows on hover
-            div.classList.add('group');
+                </div>`;
 
-            // Toggle state logic
-            const stateBtn = div.querySelector('.switch-state-btn');
-            stateBtn.addEventListener('click', async () => {
-                let nextState = 'pendiente';
-                if (t.estado === 'pendiente') nextState = 'en_progreso';
-                else if (t.estado === 'en_progreso') nextState = 'completada';
-                else if (t.estado === 'completada') nextState = 'pendiente';
-
-                await window.api.updateEstadoTarea(t.id, nextState);
-                await loadAllTareas();
-            });
-
-            // Delete task logic
-            const delBtn = div.querySelector('.delete-task-btn');
-            delBtn.addEventListener('click', async () => {
-                if(confirm('¿Seguro de borrar esta tarea?')) {
-                    await window.api.deleteTarea(t.id);
-                    await loadAllTareas();
-                }
-            });
+            // Open detail modal on click
+            div.addEventListener('click', () => openDetailModal(t));
 
             tasksList.appendChild(div);
         });

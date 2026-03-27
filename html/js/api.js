@@ -97,6 +97,18 @@ const api = {
 
     if (error) throw error;
     return true;
+  },
+
+  async updateTarea(id, updates) {
+    updates.actualizado_en = new Date().toISOString();
+    const { data, error } = await window.supabaseClient
+      .from('tareas')
+      .update(updates)
+      .eq('id', id)
+      .select();
+
+    if (error) throw error;
+    return data;
   }
 };
 
