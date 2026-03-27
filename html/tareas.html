@@ -86,11 +86,15 @@
     body {
       min-height: 100dvh;
     }
+    /* iOS Safe Area Support */
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
   </style>
   </head>
-<body class="bg-surface text-on-surface min-h-screen pb-32">
+<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px))">
 <!-- TopAppBar -->
-<header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 z-40 sticky">
+<header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 z-40 sticky safe-top">
 <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center">
@@ -174,7 +178,7 @@
 </div>
 </main>
 <!-- Floating Action Button -->
-<button id="add-task-fab" class="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl shadow-[0_12px_32px_-4px_rgba(53,37,205,0.3)] flex items-center justify-center transition-transform active:scale-95 z-50">
+<button id="add-task-fab" class="fixed right-6 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl shadow-[0_12px_32px_-4px_rgba(53,37,205,0.3)] flex items-center justify-center transition-transform active:scale-95 z-50" style="bottom: calc(6rem + env(safe-area-inset-bottom, 0px))">
 <span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
 </button>
 <!-- Task Creation Modal -->

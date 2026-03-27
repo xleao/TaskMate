@@ -86,11 +86,15 @@
     body {
       min-height: 100dvh;
     }
+    /* iOS Safe Area Support */
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
   </style>
   </head>
-<body class="bg-surface text-on-surface min-h-screen pb-32">
+<body class="bg-surface text-on-surface min-h-screen" style="padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px))">
 <!-- TopAppBar -->
-<header class="bg-[#f9f9ff] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto docked full-width top-0 sticky z-40">
+<header class="bg-[#f9f9ff] dark:bg-slate-950 flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto docked full-width top-0 sticky z-40 safe-top">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
 <img class="w-full h-full object-cover" data-alt="Close up portrait of a young male student with a focused expression in a bright library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAlATYGGsmFJWKeUJH-ne35ZPcs51v-2nbCtM0Rm8tYqZ23mdgOL9JLCuRxrC8d3jEk6PN-0BsoStQ8Cd8WrRHLS--PXqDkrWgpPTN1hoMUbphy5vgjmO9PW3GlGdt0rfoficQW4QzKJlLwJ_101HSUrxtWRn-lQtGVeTAqmf0kZcHKgIgatgulOCAcF3ja4gz5V6py2f2YXRXUKaQyNJkKDtOjm5GTZbFKRNqFKEPXLo2bwxsn_34FdEFnohwVTJpDD3uiDZTJgJ1"/>
