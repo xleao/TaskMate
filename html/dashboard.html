@@ -150,7 +150,7 @@
 <!-- Vista Rápida Section (Bento Grid Style) -->
 <section class="space-y-4">
 <h2 class="font-headline text-xl font-bold text-on-surface">Vista Rápida</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="bg-surface-container-low p-6 rounded-2xl flex flex-col justify-between group hover:bg-surface-container transition-colors cursor-default">
 <div class="flex justify-between items-start">
 <span class="material-symbols-outlined text-primary text-3xl">pending_actions</span>
@@ -161,16 +161,7 @@
 <p class="text-on-surface-variant font-medium text-sm mt-1">Pendientes</p>
 </div>
 </div>
-<div class="bg-tertiary-fixed p-6 rounded-2xl flex flex-col justify-between hover:shadow-sm transition-all cursor-default">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-tertiary text-3xl">cyclone</span>
-<span class="text-xs font-bold uppercase tracking-wider text-tertiary/60">Activo</span>
-</div>
-<div class="mt-4">
-<span id="stat-progreso" class="text-4xl font-extrabold text-on-tertiary-fixed">...</span>
-<p class="text-on-tertiary-fixed-variant font-medium text-sm mt-1">En Progreso</p>
-</div>
-</div>
+
 <div class="bg-surface-container-lowest border border-outline-variant/15 p-6 rounded-2xl flex flex-col justify-between hover:bg-surface-container-low transition-colors cursor-default">
 <div class="flex justify-between items-start">
 <span class="material-symbols-outlined text-on-surface-variant text-3xl">task_alt</span>
@@ -212,7 +203,7 @@
 </button>
 
 <!-- Task Detail/Edit Modal (Added to Dashboard for Interactivity) -->
-<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all" style="z-index: 12000;">
+<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all" style="z-index: 10000;">
     <div class="bg-surface-container-lowest w-full max-w-md rounded-[2.5rem] shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden">
         <!-- Header -->
         <div class="sticky top-0 bg-surface-container-lowest px-8 pt-8 pb-4 flex justify-between items-center">
@@ -227,7 +218,6 @@
                 <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Estado</label>
                 <div id="detail-estado-chips" class="flex flex-wrap gap-2">
                     <button data-estado="pendiente" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">⏳ Pendiente</button>
-                    <button data-estado="en_progreso" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">🔄 En Progreso</button>
                     <button data-estado="completada" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">✅ Completada</button>
                     <button data-estado="vencida" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">❌ Vencida</button>
                 </div>

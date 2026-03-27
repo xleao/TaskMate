@@ -81,6 +81,10 @@
         }
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
     </style>
 <style>
     html, body {
@@ -133,54 +137,26 @@
 </div>
 </div>
 <!-- Filter Chips -->
-<div class="relative -mx-6 px-6 mt-4" style="z-index: 100;">
-    <div class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pt-2 pb-[160px] -mb-[160px] items-center">
+<div class="relative -mx-6 px-6 mt-4 z-40">
+    <div class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth py-2 mb-2 items-center">
         <!-- Materia Filter -->
-        <div class="relative filter-dropdown-wrapper shrink-0">
-            <button id="filter-materia-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
-                <span class="material-symbols-outlined text-[18px]">school</span>
-                Materia
-                <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
-            </button>
-            <div id="filter-materia-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl border border-outline-variant/15 min-w-[200px] overflow-hidden" style="z-index: 9998; box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
-                <div id="filter-materia-options" class="max-h-48 overflow-y-auto py-2">
-                    <button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todas</button>
-                </div>
-            </div>
-        </div>
+        <button id="filter-materia-btn" class="filter-chip shrink-0 flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">school</span>
+            Materia
+            <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+        </button>
         <!-- Estado Filter -->
-        <div class="relative filter-dropdown-wrapper shrink-0">
-            <button id="filter-estado-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
-                <span class="material-symbols-outlined text-[18px]">flag</span>
-                Estado
-                <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
-            </button>
-            <div id="filter-estado-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl border border-outline-variant/15 min-w-[180px] overflow-hidden" style="z-index: 9998; box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
-                <div class="py-2">
-                    <button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todos</button>
-                    <button data-value="pendiente" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">⏳ Pendiente</button>
-                    <button data-value="en_progreso" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">🔄 En Progreso</button>
-                    <button data-value="completada" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">✅ Completada</button>
-                    <button data-value="vencida" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">❌ Vencida</button>
-                </div>
-            </div>
-        </div>
+        <button id="filter-estado-btn" class="filter-chip shrink-0 flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">flag</span>
+            Estado
+            <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+        </button>
         <!-- Prioridad Filter -->
-        <div class="relative filter-dropdown-wrapper shrink-0">
-            <button id="filter-prioridad-btn" class="filter-chip flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
-                <span class="material-symbols-outlined text-[18px]">priority_high</span>
-                Prioridad
-                <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
-            </button>
-            <div id="filter-prioridad-dropdown" class="hidden absolute top-full left-0 mt-2 bg-surface-container-lowest rounded-xl border border-outline-variant/15 min-w-[160px] overflow-hidden" style="z-index: 9998; box-shadow: 0 12px 40px rgba(0,0,0,0.18);">
-                <div class="py-2">
-                    <button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todas</button>
-                    <button data-value="alta" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-error hover:bg-surface-container-high transition-colors">🔴 Alta</button>
-                    <button data-value="media" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-yellow-600 hover:bg-surface-container-high transition-colors">🟡 Media</button>
-                    <button data-value="baja" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-emerald-600 hover:bg-surface-container-high transition-colors">🟢 Baja</button>
-                </div>
-            </div>
-        </div>
+        <button id="filter-prioridad-btn" class="filter-chip shrink-0 flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap hover:bg-surface-container-highest transition-colors active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">priority_high</span>
+            Prioridad
+            <span class="material-symbols-outlined text-[14px] ml-0.5">expand_more</span>
+        </button>
     </div>
 </div>
 </div>
@@ -272,7 +248,7 @@
 </div>
 
 <!-- Task Detail/Edit Modal -->
-<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all" style="z-index: 12000;">
+<div id="task-detail-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all z-[12000]">
     <div class="bg-surface-container-lowest w-full max-w-md rounded-[2.5rem] shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden animate-[modalScaleIn_0.3s_ease-out]">
         <style>
             @keyframes modalScaleIn {
@@ -293,7 +269,6 @@
                 <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Estado</label>
                 <div id="detail-estado-chips" class="flex flex-wrap gap-2">
                     <button data-estado="pendiente" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">⏳ Pendiente</button>
-                    <button data-estado="en_progreso" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">🔄 En Progreso</button>
                     <button data-estado="completada" class="estado-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">✅ Completada</button>
                 </div>
             </div>
@@ -339,6 +314,61 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all z-[14000]">
+    <div class="bg-surface-container-lowest w-full max-w-sm rounded-[2rem] shadow-2xl relative p-8 flex flex-col items-center text-center animate-[modalScaleIn_0.3s_ease-out]">
+        <div class="w-16 h-16 bg-red-100/50 text-error rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-[32px]">delete</span>
+        </div>
+        <h3 class="font-headline font-extrabold text-2xl text-on-surface mb-2">¿Eliminar Tarea?</h3>
+        <p class="text-on-surface-variant text-sm mb-8 font-medium">Esta acción es permanente y no podrás recuperar los datos de esta tarea.</p>
+        <div class="flex gap-3 w-full">
+            <button id="cancel-delete-btn" class="flex-1 py-4 bg-surface-container text-on-surface-variant font-bold rounded-2xl active:scale-[0.98] transition-all hover:bg-surface-container-high border border-outline-variant/20">
+                Cancelar
+            </button>
+            <button id="confirm-delete-btn" class="flex-1 py-4 bg-error text-white font-bold rounded-2xl shadow-lg shadow-error/20 active:scale-[0.98] transition-all hover:bg-red-700">
+                Sí, eliminar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Bottom Sheets Modals -->
+<div id="filter-materia-dropdown" class="hidden fixed inset-0 z-[13000] flex items-end justify-center bg-slate-900/60 backdrop-blur-md transition-all">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-[2.5rem] p-6 pb-14 shadow-2xl animate-[slideUp_0.3s_ease-out]">
+        <div class="w-12 h-1.5 bg-outline-variant/50 rounded-full mx-auto mb-6"></div>
+        <h3 class="text-xl font-extrabold font-headline mb-4 text-on-surface">Materia</h3>
+        <input type="text" id="materia-search" placeholder="Buscar materia..." class="w-full bg-surface-container border-none rounded-xl px-4 py-4 text-sm focus:ring-2 focus:ring-primary/20 mb-4 font-body text-on-surface">
+        <div id="filter-materia-options" class="max-h-[50vh] overflow-y-auto space-y-2 pr-2">
+            <button data-value="" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors bg-surface-container-low">Todas</button>
+        </div>
+    </div>
+</div>
+<div id="filter-estado-dropdown" class="hidden fixed inset-0 z-[13000] flex items-end justify-center bg-slate-900/60 backdrop-blur-md transition-all">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-[2.5rem] p-6 pb-14 shadow-2xl animate-[slideUp_0.3s_ease-out]">
+        <div class="w-12 h-1.5 bg-outline-variant/50 rounded-full mx-auto mb-6"></div>
+        <h3 class="text-xl font-extrabold font-headline mb-4 text-on-surface">Estado</h3>
+        <div class="max-h-[50vh] overflow-y-auto space-y-2 pr-2">
+            <button data-value="" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors bg-surface-container-low">Todos</button>
+            <button data-value="pendiente" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors">⏳ Pendiente</button>
+            <button data-value="completada" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors">✅ Completada</button>
+            <button data-value="vencida" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors">❌ Vencida</button>
+        </div>
+    </div>
+</div>
+<div id="filter-prioridad-dropdown" class="hidden fixed inset-0 z-[13000] flex items-end justify-center bg-slate-900/60 backdrop-blur-md transition-all">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-[2.5rem] p-6 pb-14 shadow-2xl animate-[slideUp_0.3s_ease-out]">
+        <div class="w-12 h-1.5 bg-outline-variant/50 rounded-full mx-auto mb-6"></div>
+        <h3 class="text-xl font-extrabold font-headline mb-4 text-on-surface">Prioridad</h3>
+        <div class="max-h-[50vh] overflow-y-auto space-y-2 pr-2">
+            <button data-value="" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors bg-surface-container-low">Todas</button>
+            <button data-value="alta" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-error hover:bg-red-50 transition-colors">🔴 Alta</button>
+            <button data-value="media" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-yellow-600 hover:bg-yellow-50 transition-colors">🟡 Media</button>
+            <button data-value="baja" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-emerald-600 hover:bg-emerald-50 transition-colors">🟢 Baja</button>
         </div>
     </div>
 </div>

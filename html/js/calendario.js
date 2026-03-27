@@ -9,10 +9,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Elementos del DOM
     const monthTitle = document.getElementById('month-title');
     const calendarGrid = document.getElementById('calendar-grid-cells');
-    const dayTasksList = document.getElementById('day-tasks-list');
-    const selectedDayTitle = document.getElementById('selected-day-title');
     const prevMonthBtn = document.getElementById('prev-month-btn');
     const nextMonthBtn = document.getElementById('next-month-btn');
+
+    const monthViewContainer = document.getElementById('month-view-container');
+    const dayViewContainer = document.getElementById('day-view-container');
+    const backToMonthBtn = document.getElementById('back-to-month-btn');
+    const timelineHoursContainer = document.getElementById('timeline-hours-container');
+    const dayViewTitle = document.getElementById('day-view-title');
+    const areasEnfoqueList = document.getElementById('areas-enfoque-list');
+
+    if (backToMonthBtn) {
+        backToMonthBtn.addEventListener('click', () => {
+            dayViewContainer.classList.add('hidden');
+            dayViewContainer.classList.remove('flex');
+            monthViewContainer.classList.remove('hidden');
+        });
+    }
 
     let currentDate = new Date();
     let tareasDB = [];
@@ -81,8 +94,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Highlight si es hoy
             if (isCurrentMonth && day === today.getDate()) {
                 div.innerHTML = `
-                    <div class="absolute inset-1 rounded-xl bg-primary/10 border-2 border-primary/20"></div>
-                    <span class="relative z-10 bg-primary text-on-primary w-8 h-8 flex items-center justify-center rounded-full mt-1 font-bold shadow-md">${day}</span>
+                    <div class="absolute inset-1 rounded-xl border border-primary/20 bg-primary/5"></div>
+                    <span class="mt-1 font-extrabold text-primary relative z-10">${day}</span>
                 `;
             } else {
                 div.innerHTML = `<span class="mt-1 font-semibold text-on-surface">${day}</span>`;
@@ -120,6 +133,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             calendarGrid.appendChild(div);
         }
 
+        // Render Áreas de Enfoque (para todos los tasks del mes)
+        const tareasDelMes = tareasDB.filter(t => {
+            if (!t.fecha_entrega) return false;
+            const tDate = new Date(t.fecha_entrega);
+            return tDate.getFullYear() === year && tDate.getMonth() === month;
+        });
+        renderAreasEnfoque(tareasDelMes);
+
         // Rellenar final de la grilla (hasta múltiplo de 7)
         const totalCells = startOffset + daysInMonth;
         const remainder = totalCells % 7;
@@ -136,45 +157,201 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Mostrar tareas del día clickeado en la barra lateral
     function mostrarTareasDelDia(day, month, year, tareasDelDia) {
-        if (!selectedDayTitle || !dayTasksList) return;
+        if (!monthViewContainer || !dayViewContainer) return;
+
+        monthViewContainer.classList.add('hidden');
+        dayViewContainer.classList.remove('hidden');
+        dayViewContainer.classList.add('flex');
 
         const dateObj = new Date(year, month, day);
-        const options = { weekday: 'long', month: 'short', day: 'numeric' };
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
         let titleStr = dateObj.toLocaleDateString('es-ES', options);
-        titleStr = titleStr.charAt(0).toUpperCase() + titleStr.slice(1);
-        
-        selectedDayTitle.textContent = titleStr;
-        dayTasksList.innerHTML = '';
+        dayViewTitle.textContent = titleStr.charAt(0).toUpperCase() + titleStr.slice(1);
 
-        if (tareasDelDia.length === 0) {
-            dayTasksList.innerHTML = `<p class="text-sm text-on-surface-variant text-center my-8">No hay tareas programadas para este día.</p>`;
+        timelineHoursContainer.innerHTML = '';
+
+        for (let i = 0; i < 24; i++) {
+            const tareasHora = tareasDelDia.filter(t => {
+                const d = new Date(t.fecha_entrega);
+                return d.getHours() === i;
+            });
+
+            const hourDiv = document.createElement('div');
+            hourDiv.className = "w-72 md:w-80 flex-shrink-0 bg-surface-container-lowest rounded-3xl p-6 shadow-md border border-outline-variant/10 min-h-[300px] flex flex-col hover:border-primary/20 transition-all";
+            
+            const hourText = i === 0 ? '12:00 AM' : (i < 12 ? `${i}:00 AM` : (i === 12 ? '12:00 PM' : `${i-12}:00 PM`));
+            
+            let htmlStr = `<div class="flex items-center justify-between border-b border-outline-variant/15 pb-4 mb-4">
+                <span class="text-lg font-extrabold text-on-surface-variant font-headline tracking-tight">${hourText}</span>
+                <span class="text-xs font-bold px-2 py-1 rounded-md bg-surface-container ${tareasHora.length > 0 ? 'text-primary' : 'text-on-surface-variant/60'}">${tareasHora.length} tareas</span>
+            </div>`;
+            
+            let tasksHtml = '<div class="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2">';
+            
+            if (tareasHora.length === 0) {
+                tasksHtml += `<div class="h-full flex flex-col items-center justify-center text-sm font-medium text-on-surface-variant/40 italic"><span class="material-symbols-outlined text-4xl mb-2 opacity-30">coffee</span>Libre</div>`;
+            } else {
+                tareasHora.forEach(t => {
+                    const materiaInfo = t.materias ? t.materias : { nombre: 'Sin materia', color: '#c4c7c9' };
+                    const isCompleted = t.estado === 'completada';
+                    const timeStr = new Date(t.fecha_entrega).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                    
+                    tasksHtml += `
+                    <div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/15 relative overflow-hidden group hover:shadow-lg hover:border-outline-variant/40 transition-all cursor-default ${isCompleted ? 'opacity-50' : ''}">
+                        <div class="absolute left-0 top-0 bottom-0 w-2" style="background-color: ${materiaInfo.color}"></div>
+                        <div class="pl-3">
+                            <h4 class="font-bold text-on-surface text-base leading-tight mb-2 ${isCompleted ? 'line-through' : ''}">${t.titulo}</h4>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 truncate mr-2" title="${materiaInfo.nombre}">${materiaInfo.nombre}</span>
+                                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-lg whitespace-nowrap" style="color: ${materiaInfo.color}; background-color: ${materiaInfo.color}20">${timeStr}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+            tasksHtml += '</div>';
+            
+            hourDiv.innerHTML = htmlStr + tasksHtml;
+            timelineHoursContainer.appendChild(hourDiv);
+        }
+
+        // --- Renderizar Minimapa y Scroll Sync ---
+        const scrollArea = document.getElementById('timeline-scroll-area');
+        const minimap = document.getElementById('day-timeline-minimap');
+
+        if (minimap && scrollArea) {
+            minimap.innerHTML = '';
+            
+            // Thumb del scroll
+            const thumb = document.createElement('div');
+            thumb.className = "absolute h-full bg-outline-variant/30 rounded-full transition-all duration-75 min-w-[32px] md:min-w-[48px] z-10";
+            minimap.appendChild(thumb);
+
+            // Generar Puntos de Tareas
+            tareasDelDia.forEach(t => {
+                const materiaInfo = t.materias ? t.materias : { color: '#c4c7c9' };
+                const dt = new Date(t.fecha_entrega);
+                const hrs = dt.getHours();
+                const mins = dt.getMinutes();
+                // Calcular posicion x en el minimapa (0-100%) en base a la hora de las 24
+                const percent = ((hrs + (mins / 60)) / 24) * 100;
+
+                const dot = document.createElement('div');
+                dot.className = "absolute w-2 h-2 rounded-full transform -translate-x-1/2 z-20 hover:scale-[2] transition-transform shadow-[0_0_8px_rgba(0,0,0,0.2)]";
+                dot.style.backgroundColor = materiaInfo.color;
+                dot.style.left = `${percent}%`;
+                
+                // Click en un punto salta a esa hora
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    scrollArea.scrollTo({
+                        left: Math.max(0, hrs - 1) * 344, // 344 es approx el ancho de un bloque
+                        behavior: 'smooth'
+                    });
+                });
+                minimap.appendChild(dot);
+            });
+
+            // Actualizar thumb
+            const updateMinimap = () => {
+                const maxScrollLeft = scrollArea.scrollWidth - scrollArea.clientWidth;
+                if (maxScrollLeft <= 0) {
+                    thumb.style.width = '100%';
+                    thumb.style.transform = `translateX(0px)`;
+                    return;
+                }
+                const scrollPercent = scrollArea.scrollLeft / maxScrollLeft;
+                const thumbWidthPercent = (scrollArea.clientWidth / scrollArea.scrollWidth) * 100;
+                thumb.style.width = `${Math.max(10, thumbWidthPercent)}%`;
+                
+                const maxThumbX = minimap.clientWidth - thumb.clientWidth;
+                const leftPx = scrollPercent * maxThumbX;
+                thumb.style.transform = `translateX(${leftPx}px)`;
+            };
+
+            // Ligar evento de scroll
+            scrollArea.onscroll = updateMinimap;
+
+            // Click generico en minimapa
+            minimap.onclick = (e) => {
+                if(e.target === thumb) return;
+                const rect = minimap.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percent = clickX / minimap.clientWidth;
+                
+                scrollArea.scrollTo({
+                    left: percent * (scrollArea.scrollWidth - scrollArea.clientWidth),
+                    behavior: 'smooth'
+                });
+            };
+
+            // Auto-scroll inicial a la primera tarea
+            setTimeout(() => {
+                let sortTareas = [...tareasDelDia].sort((a,b) => new Date(a.fecha_entrega) - new Date(b.fecha_entrega));
+                const firstHourWithTask = sortTareas.length > 0 ? new Date(sortTareas[0].fecha_entrega).getHours() : 8;
+                
+                scrollArea.scrollTo({
+                    left: Math.max(0, firstHourWithTask - 1) * 344, 
+                    behavior: 'smooth'
+                });
+                updateMinimap();
+            }, 100);
+        }
+    }
+
+    // Renderizar Áreas de Enfoque este mes
+    function renderAreasEnfoque(tareasMesActivo) {
+        if (!areasEnfoqueList) return;
+        
+        const materiaCounts = {};
+        let plazosCriticos = 0;
+        const now = new Date();
+        const next3Days = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+        tareasMesActivo.forEach(t => {
+            if (t.estado !== 'completada') {
+                const date = new Date(t.fecha_entrega);
+                if (date <= next3Days && date >= now) plazosCriticos++;
+                
+                if (t.materias) {
+                    if (!materiaCounts[t.materias.id]) {
+                        materiaCounts[t.materias.id] = { info: t.materias, count: 0 };
+                    }
+                    materiaCounts[t.materias.id].count++;
+                }
+            }
+        });
+
+        const sortedMaterias = Object.values(materiaCounts).sort((a,b) => b.count - a.count).slice(0, 3);
+
+        areasEnfoqueList.innerHTML = '';
+
+        if (sortedMaterias.length === 0 && plazosCriticos === 0) {
+            areasEnfoqueList.innerHTML = '<p class="text-sm text-on-surface-variant font-medium text-center">Sin tareas pendientes este mes.</p>';
             return;
         }
 
-        tareasDelDia.forEach(t => {
-            const materiaInfo = t.materias ? t.materias : { nombre: 'Sin materia', color: '#c4c7c9' };
-            const isCompleted = t.estado === 'completada';
-            
-            // Obtener la hora
-            const d = new Date(t.fecha_entrega);
-            const timeStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
-            const div = document.createElement('div');
-            div.className = `flex gap-4 p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors ${isCompleted ? 'opacity-50' : ''}`;
-            
-            div.innerHTML = `
-                <div class="w-1.5 h-12 rounded-full" style="background-color: ${materiaInfo.color}"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-on-surface leading-tight ${isCompleted ? 'line-through' : ''}">${t.titulo}</h4>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ml-2" style="color: ${materiaInfo.color}; background-color: ${materiaInfo.color}20">${timeStr}</span>
-                    </div>
-                    <p class="text-xs font-bold text-on-surface-variant/70 uppercase tracking-widest mt-1">${materiaInfo.nombre}</p>
-                    ${t.descripcion ? `<p class="text-sm text-on-surface-variant mt-1 line-clamp-1 italic">${t.descripcion}</p>` : ''}
+        sortedMaterias.forEach(m => {
+            areasEnfoqueList.innerHTML += `
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full" style="background-color: ${m.info.color}"></span>
+                    <span class="text-sm font-medium text-on-surface-variant truncate max-w-[140px]">${m.info.nombre}</span>
                 </div>
-            `;
-            dayTasksList.appendChild(div);
+                <span class="text-sm font-extrabold text-on-surface">${m.count} tareas</span>
+            </div>`;
         });
+
+        if (plazosCriticos > 0) {
+            areasEnfoqueList.innerHTML += `
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-error/20 bg-error/5 -mx-6 px-6 pb-2 rounded-b-xl">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-error animate-pulse"></span>
+                    <span class="text-sm font-bold text-error flex items-center gap-1">Plazos Críticos</span>
+                </div>
+                <span class="text-sm font-extrabold text-error">${plazosCriticos} asignaciones</span>
+            </div>`;
+        }
     }
 
     // Controles de mes

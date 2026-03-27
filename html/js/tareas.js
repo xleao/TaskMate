@@ -56,34 +56,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         prioridad: document.getElementById('filter-prioridad-dropdown')
     };
 
-    // Toggle dropdown visibility
-    function toggleDropdown(name) {
-        Object.keys(filterDropdowns).forEach(key => {
-            if (key !== name) filterDropdowns[key].classList.add('hidden');
-        });
-        filterDropdowns[name].classList.toggle('hidden');
+    // Open filter sheet
+    function openFilterSheet(name) {
+        Object.keys(filterDropdowns).forEach(key => filterDropdowns[key].classList.add('hidden'));
+        filterDropdowns[name].classList.remove('hidden');
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAllFilterSheets() {
+        Object.values(filterDropdowns).forEach(dd => dd.classList.add('hidden'));
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
     }
 
     // Setup toggle listeners
     Object.keys(filterButtons).forEach(key => {
         if (filterButtons[key]) {
-            filterButtons[key].addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleDropdown(key);
-            });
+            filterButtons[key].addEventListener('click', () => openFilterSheet(key));
         }
     });
 
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.filter-dropdown-wrapper')) {
-            Object.values(filterDropdowns).forEach(dd => dd.classList.add('hidden'));
-        }
-    });
-
+    // Close when clicking on the backdrop
     Object.values(filterDropdowns).forEach(dd => {
-        dd.addEventListener('click', (e) => e.stopPropagation());
+        dd.addEventListener('click', (e) => {
+            if (e.target === dd) closeAllFilterSheets();
+        });
     });
+
+    // Materia filter modal search box
+    const materiaSearchInput = document.getElementById('materia-search');
+    if (materiaSearchInput) {
+        materiaSearchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            const options = document.querySelectorAll('#filter-materia-options .filter-option');
+            options.forEach(opt => {
+                const text = opt.textContent.toLowerCase();
+                if (text.includes(val) || opt.dataset.value === "") {
+                    opt.style.display = '';
+                } else {
+                    opt.style.display = 'none';
+                }
+            });
+        });
+    }
 
     // --- FILTER: Estado options ---
     const estadoDropdown = document.getElementById('filter-estado-dropdown');
@@ -92,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.addEventListener('click', () => {
                 activeFilters.estado = btn.dataset.value;
                 updateFilterChipStyle('estado', btn.dataset.value);
-                estadoDropdown.classList.add('hidden');
+                closeAllFilterSheets();
                 applyFilters();
             });
         });
@@ -105,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.addEventListener('click', () => {
                 activeFilters.prioridad = btn.dataset.value;
                 updateFilterChipStyle('prioridad', btn.dataset.value);
-                prioridadDropdown.classList.add('hidden');
+                closeAllFilterSheets();
                 applyFilters();
             });
         });
@@ -117,13 +133,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!materiaOptionsContainer) return;
 
         const materias = await window.api.getMaterias();
-        materiaOptionsContainer.innerHTML = '<button data-value="" class="filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors">Todas</button>';
+        materiaOptionsContainer.innerHTML = '<button data-value="" class="filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors bg-surface-container-low">Todas</button>';
         
         materias.forEach(m => {
             const btn = document.createElement('button');
             btn.dataset.value = m.id;
-            btn.className = 'filter-option w-full text-left px-4 py-3 text-sm font-medium text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2';
-            btn.innerHTML = `<span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${m.color}"></span> ${m.nombre}`;
+            btn.className = 'filter-option w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-3';
+            btn.innerHTML = `<span class="w-3 h-3 rounded-full inline-block" style="background:${m.color}"></span> ${m.nombre}`;
             materiaOptionsContainer.appendChild(btn);
         });
 
@@ -131,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.addEventListener('click', () => {
                 activeFilters.materia = btn.dataset.value;
                 updateFilterChipStyle('materia', btn.dataset.value);
-                filterDropdowns.materia.classList.add('hidden');
+                closeAllFilterSheets();
                 applyFilters();
             });
         });
@@ -211,13 +227,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             taskForm.reset();
             cargarMateriasSelect(taskMateriasSelect);
             taskModal.classList.remove('hidden');
+            document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
         });
     }
     if (closeTaskModalBtn) {
         closeTaskModalBtn.addEventListener('click', () => {
-             taskModal.classList.add('hidden');
-             document.body.style.overflow = '';
+            taskModal.classList.add('hidden');
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        });
+    }
+
+    if (taskModal) {
+        taskModal.addEventListener('click', (e) => {
+            if (e.target === taskModal) {
+                taskModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -247,6 +275,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateEstadoChips(tarea.estado);
 
         detailModal.classList.remove('hidden');
+        document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
     }
 
@@ -276,6 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (closeDetailModal) {
         closeDetailModal.addEventListener('click', () => {
             detailModal.classList.add('hidden');
+            document.documentElement.style.overflow = '';
             document.body.style.overflow = '';
         });
     }
@@ -284,6 +314,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         detailModal.addEventListener('click', (e) => {
             if (e.target === detailModal) {
                 detailModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
                 document.body.style.overflow = '';
             }
         });
@@ -307,6 +338,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     estado: currentEditEstado
                 });
                 detailModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
                 document.body.style.overflow = '';
                 await loadAllTareas();
             } catch (err) {
@@ -318,18 +350,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Delete from detail modal
+    // Delete Confirmation Logic
+    const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+    const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
     if (deleteDetailBtn) {
-        deleteDetailBtn.addEventListener('click', async () => {
-            if (confirm('¿Seguro de borrar esta tarea?')) {
-                try {
-                    await window.api.deleteTarea(editTaskId.value);
-                    detailModal.classList.add('hidden');
-                    document.body.style.overflow = '';
-                    await loadAllTareas();
-                } catch (err) {
-                    alert('Error al eliminar: ' + err.message);
-                }
+        deleteDetailBtn.addEventListener('click', () => {
+            detailModal.classList.add('hidden');
+            if(deleteConfirmModal) deleteConfirmModal.classList.remove('hidden');
+        });
+    }
+
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteConfirmModal.classList.add('hidden');
+            detailModal.classList.remove('hidden'); // Go back to detail modal
+        });
+    }
+
+    if (deleteConfirmModal) {
+        deleteConfirmModal.addEventListener('click', (e) => {
+            if (e.target === deleteConfirmModal) {
+                deleteConfirmModal.classList.add('hidden');
+                detailModal.classList.remove('hidden');
+            }
+        });
+    }
+
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', async () => {
+            const originalText = confirmDeleteBtn.textContent;
+            confirmDeleteBtn.disabled = true;
+            confirmDeleteBtn.textContent = 'Eliminando...';
+            try {
+                await window.api.deleteTarea(editTaskId.value);
+                deleteConfirmModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                await loadAllTareas();
+            } catch (err) {
+                alert('Error al eliminar: ' + err.message);
+            } finally {
+                confirmDeleteBtn.disabled = false;
+                confirmDeleteBtn.textContent = originalText;
             }
         });
     }
@@ -348,7 +412,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function getStateBadge(estado) {
         if (estado === 'pendiente') return `<span class="bg-secondary-container text-secondary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Pendiente</span>`;
-        if (estado === 'en_progreso') return `<span class="bg-primary-container text-primary px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">En progreso</span>`;
         if (estado === 'completada') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Completada</span>`;
         return `<span class="bg-error-container text-error px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Vencida</span>`;
     }
@@ -462,6 +525,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     titulo, descripcion, materia_id, fecha_entrega, prioridad, estado: 'pendiente'
                 });
                 taskModal.classList.add('hidden');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
                 taskForm.reset();
                 await loadAllTareas();
             } catch (err) {

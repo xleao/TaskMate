@@ -130,8 +130,10 @@
 <button class="px-6 py-2 rounded-lg text-sm font-semibold transition-all bg-surface-container-lowest text-primary shadow-sm">Mensual</button>
 </div>
 </section>
-<!-- Calendar Grid Layout -->
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Calendar Views Wrapper -->
+<section id="calendar-views-wrapper">
+    <!-- Month View Container -->
+    <div id="month-view-container" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <!-- Monthly Calendar Shell -->
 <div class="lg:col-span-8 bg-surface-container-low rounded-xl p-6">
 <!-- Calendar Controls -->
@@ -180,34 +182,45 @@
     <p class="text-sm text-on-surface-variant text-center my-8">Haz clic en un día del calendario para ver tus tareas.</p>
 </div>
 </div>
-<!-- Subjects Legend / Mini Stats -->
-<div class="bg-surface-container-low rounded-xl p-6">
-<h4 class="font-bold text-on-surface mb-4">Áreas de enfoque este mes</h4>
-<div class="space-y-3">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="w-3 h-3 rounded-full bg-primary"></span>
-<span class="text-sm font-medium text-on-surface-variant">Matemáticas</span>
-</div>
-<span class="text-sm font-bold text-on-surface">12 tareas</span>
-</div>
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
-<span class="text-sm font-medium text-on-surface-variant">Humanidades</span>
-</div>
-<span class="text-sm font-bold text-on-surface">8 tareas</span>
-</div>
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="w-3 h-3 rounded-full bg-error"></span>
-<span class="text-sm font-medium text-on-surface-variant">Plazos</span>
-</div>
-<span class="text-sm font-bold text-on-surface">3 críticas</span>
-</div>
-</div>
-</div>
-</div>
+        <!-- Subjects Legend / Mini Stats -->
+        <div class="bg-surface-container-low rounded-xl p-6">
+            <h4 class="font-bold text-on-surface mb-4">Áreas de enfoque este mes</h4>
+            <div id="areas-enfoque-list" class="space-y-3">
+                <p class="text-sm text-on-surface-variant">Cargando datos...</p>
+            </div>
+        </div>
+    </div>
+    </div> <!-- End Month View Container -->
+
+    <!-- Day View Container (Timeline) -->
+    <div id="day-view-container" class="hidden bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-2xl border border-outline-variant/15 flex-col">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div>
+                <p class="text-label-sm font-bold text-primary uppercase tracking-wider mb-1">Horario Diario</p>
+                <h2 id="day-view-title" class="text-3xl font-extrabold text-on-surface font-headline tracking-tight">Cargando...</h2>
+            </div>
+            <button id="back-to-month-btn" class="flex items-center gap-2 text-primary font-bold hover:bg-surface-container-high py-3 px-5 rounded-2xl transition-all w-fit bg-surface-container-low border border-primary/20 shadow-sm active:scale-95">
+                <span class="material-symbols-outlined">calendar_month</span>
+                Volver al mes
+            </button>
+        </div>
+        
+        <!-- Contenedor scroll horizontal -->
+        <div id="timeline-scroll-area" class="relative w-full overflow-x-auto pb-6 -mx-6 px-6 md:mx-0 md:px-0 custom-scrollbar">
+            <div class="flex items-stretch gap-6 min-w-max pb-4" id="timeline-hours-container">
+                <!-- JS inyectará 24 bloques de hora aquí -->
+            </div>
+        </div>
+
+        <!-- Indicador de tareas / Minimapa -->
+        <div class="mt-2 px-2 md:px-12 flex items-center justify-center gap-3">
+            <span class="material-symbols-outlined text-outline-variant/60 text-sm">navigate_before</span>
+            <div id="day-timeline-minimap" class="w-full h-3 bg-surface-container-high/50 rounded-full relative overflow-hidden flex items-center cursor-pointer hover:bg-surface-container-high transition-colors">
+                <!-- Puntos inyectados via JS -->
+            </div>
+            <span class="material-symbols-outlined text-outline-variant/60 text-sm">navigate_next</span>
+        </div>
+    </div>
 </section>
 </main>
 <!-- BottomNavBar -->

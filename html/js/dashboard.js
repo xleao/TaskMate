@@ -135,7 +135,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const tareas = await window.api.getTareas();
         
         let pendientes = 0;
-        let progreso = 0;
         let completadas = 0;
         let tareasVencerPronto = [];
         let ahora = new Date();
@@ -146,7 +145,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         tareas.forEach(t => {
             if (t.estado === 'pendiente') pendientes++;
-            else if (t.estado === 'en_progreso') progreso++;
             else if (t.estado === 'completada') completadas++;
 
             let fechaEntrega = new Date(t.fecha_entrega);
@@ -159,7 +157,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         if(statPendiente) statPendiente.textContent = pendientes;
-        if(statProgreso) statProgreso.textContent = progreso;
         if(statCompletada) statCompletada.textContent = completadas;
 
         if(alertsText) {
