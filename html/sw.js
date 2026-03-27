@@ -43,3 +43,21 @@ self.addEventListener('activate', (event) => {
     })
   );
 });
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+          const url = event.notification.data ? event.notification.data.url : './tareas.html';
+          
+          for (const client of clientList) {
+              if (client.url.includes('TaskMate') && 'focus' in client) {
+                  return client.focus();
+              }
+          }
+          if (clients.openWindow) {
+              return clients.openWindow(url);
+          }
+      })
+  );
+});

@@ -130,6 +130,24 @@
 <h1 id="user-greeting" class="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Hola</h1>
 <p class="text-on-surface-variant font-medium">Es un buen día para avanzar en tus objetivos.</p>
 </section>
+
+<!-- Notifications Permission Banner (Hidden if permission granted) -->
+<section id="notification-prompt" class="hidden relative overflow-hidden rounded-2xl p-5 border border-primary/20 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-colors">
+<div class="flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[20px]">notifications_active</span>
+        </div>
+        <div>
+            <h3 class="font-headline font-bold text-on-surface leading-tight text-sm">Activar Recordatorios</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">Recibe una alerta 10 min antes de cada entrega.</p>
+        </div>
+    </div>
+    <button id="enable-notifications-btn" class="text-xs font-bold text-white bg-primary px-3 py-1.5 rounded-lg active:scale-95 transition-transform">
+        Permitir
+    </button>
+</div>
+</section>
 <!-- Alerts Banner (Intentional Asymmetry) -->
 <section class="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-[0_12px_32px_-4px_rgba(53,37,205,0.15)]">
 <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -315,6 +333,7 @@
 <script src="./js/supabase-config.js"></script>
 <script src="./js/auth.js"></script>
 <script src="./js/api.js"></script>
+<script src="./js/notificaciones.js"></script>
 <script src="./js/dashboard.js"></script>
 <script src="./js/pwa-setup.js"></script>
 </body></html>
